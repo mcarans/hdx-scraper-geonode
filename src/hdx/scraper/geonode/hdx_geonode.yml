@@ -24,10 +24,6 @@ titleabstract_mapping:
     - floods
   drought:
     - drought
-  ffa:
-    - 'food assistance'
-  'food for assets':
-    - 'food assistance'
   'emergency levels':
     - 'hazards and risk'
   'food distribution':
