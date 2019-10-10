@@ -10,7 +10,7 @@ Reads from GeoNode servers and creates datasets.
 
 import logging
 from typing import List, Dict, Optional, Tuple
-from urllib.parse import  quote_plus
+from six.moves.urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
 from hdx.data.resource import Resource
