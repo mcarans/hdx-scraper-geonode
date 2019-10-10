@@ -1,0 +1,83 @@
+ignore_data:
+  - deprecated
+
+category_mapping:
+  Elevation: 'elevation - topography - altitude'
+  Boundaries: geodata
+  Location: 'populated places - settlements'
+  Transportation: transportation
+  Structure: 'facilities and infrastructure'
+  Environment: environment
+  'Inland Waters': river
+  'Physical Features, Land Cover, Land Use, DEM': 'land use and land cover'
+  Farming: 'food production'
+  'Natural Hazards': 'hazards and risk'
+
+titleabstract_mapping:
+  'land cover':
+    - 'land use and land cover'
+  forest:
+    - 'land use and land cover'
+  landslide:
+    - landslides
+  flood:
+    - floods
+  drought:
+    - drought
+  ffa:
+    - 'food assistance'
+  'food for assets':
+    - 'food assistance'
+  'emergency levels':
+    - 'hazards and risk'
+  'food distribution':
+    - 'food assistance'
+  frost:
+    - 'cold wave'
+  erosion:
+    - mudslide
+  mudflow:
+    - mudslide
+  mudslide:
+    - mudslide
+  streets:
+    - roads
+    - transportation
+  roads:
+    - roads
+    - transportation
+  airport:
+    - aviation
+    - 'facilities and infrastructure'
+  airstrip:
+    - aviation
+    - 'facilities and infrastructure'
+  bridges:
+    - bridges
+    - transportation
+    - 'facilities and infrastructure'
+  admin:
+    boundaries:
+      - 'administrative divisions'
+  security:
+    food:
+      - 'food security'
+    else:
+      - security
+  refugee:
+    camp:
+      - 'displaced persons locations - camps - shelters'
+      - refugees
+    else:
+      - refugees
+  idp:
+    camp:
+      - 'displaced persons locations - camps - shelters'
+      - 'internally displaced persons - idp'
+    else:
+      - 'internally displaced persons - idp'
+  nutrition:
+    malnutrition:
+      - malnutrition
+    else:
+      - nutrition
