@@ -44,7 +44,8 @@ to HDX metadata tags.
 titleabstract_mapping are terms in the title or abstract that mean that 
 particular tags should be added to the HDX metadata tags.
 
-For more fine grained tuning of these, you can do:
+For more fine grained tuning of these, you retrieve the dictionaries and
+manipulate them directly:
 
     geonodetohdx = GeoNodeToHDX('https://geonode.wfp.org', downloader)
     ignore_data = geonodetohdx.get_ignore_data() 
