@@ -1,7 +1,17 @@
 [![Build Status](https://travis-ci.org/OCHA-DAP/hdx-scraper-geonode.svg?branch=master&ts=1)](https://travis-ci.org/OCHA-DAP/hdx-scraper-geonode) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-geonode/badge.svg?branch=master&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-geonode?branch=master)
 
 The HDX Scraper Geonode Library enables easy building of scrapers for extracting data 
-from geonode servers. It has class GeoNodeToHDX which has methods:
+from geonode servers. 
+
+## Usage
+
+The library has detailed API documentation which can be found
+here: <http://ocha-dap.github.io/hdx-scraper-geonode/>. The code for the
+library is here: <https://github.com/ocha-dap/hdx-scraper-geonode>.
+
+## Building a Project
+
+You should create an object of the GeoNodeToHDX class which has methods:
 get_locationsdata, get_layersdata, generate_dataset_and_showcase.
 
     geonodetohdx = GeoNodeToHDX('https://geonode.wfp.org', downloader)
