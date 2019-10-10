@@ -9,7 +9,7 @@ The library has detailed API documentation which can be found
 here: <http://ocha-dap.github.io/hdx-scraper-geonode/>. The code for the
 library is here: <https://github.com/ocha-dap/hdx-scraper-geonode>.
 
-## Building a Project
+## GeoNodeToHDX Class
 
 You should create an object of the GeoNodeToHDX class which has methods:
 get_locationsdata, get_layersdata, generate_dataset_and_showcase.
