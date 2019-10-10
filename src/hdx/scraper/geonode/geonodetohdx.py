@@ -9,7 +9,7 @@ Reads from GeoNode servers and creates datasets.
 """
 
 import logging
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union
 from six.moves.urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
@@ -67,12 +67,36 @@ class GeoNodeToHDX(object):
         self.titleabstract_mapping = geonode_config['titleabstract_mapping']
 
     def get_ignore_data(self):
+        # type: () -> List[str]
+        """
+        Get terms in the abstract that mean that the dataset should not be added to HDX
+
+        Returns:
+            List[str]: List of terms in the abstract that mean that the dataset should not be added to HDX
+
+        """
         return self.ignore_data
 
     def get_category_mapping(self):
+        # type: () -> Dict[str,str]
+        """
+        Get mappings from the category field category__gn_description to HDX metadata tags
+
+        Returns:
+            Dict[str,str]: List of mappings from the category field category__gn_description to HDX metadata tags
+
+        """
         return self.category_mapping
 
     def get_titleabstract_mapping(self):
+        # type: () -> Dict[str,Union[Dict,List]]
+        """
+        Get mappings from terms in the title or abstract to HDX metadata tags
+
+        Returns:
+            Dict[str,Union[Dict,List]]: List of mappings from terms in the title or abstract to HDX metadata tags
+
+        """
         return self.titleabstract_mapping
 
     def get_countries(self, use_count=True):

@@ -51,8 +51,8 @@ should not be added to HDX.
 category_mapping are mappings from the category field category__gn_description 
 to HDX metadata tags.
   
-titleabstract_mapping are terms in the title or abstract that mean that 
-particular tags should be added to the HDX metadata tags.
+titleabstract_mapping are mappings from terms in the title or abstract to 
+HDX metadata tags.
 
 For more fine grained tuning of these, you retrieve the dictionaries and
 manipulate them directly:
