@@ -19,23 +19,23 @@ titleabstract_mapping:
   forest:
     - 'land use and land cover'
   landslide:
-    - landslides
+    - 'landslides - mudslides'
   flood:
     - floods
   drought:
-    - drought
+    - droughts
   'emergency levels':
     - 'hazards and risk'
   'food distribution':
     - 'food assistance'
   frost:
-    - 'cold wave'
+    - 'cold waves'
   erosion:
-    - mudslide
+    - erosion
   mudflow:
-    - mudslide
+    - 'landslides - mudslides'
   mudslide:
-    - mudslide
+    - 'landslides - mudslides'
   streets:
     - roads
     - transportation
