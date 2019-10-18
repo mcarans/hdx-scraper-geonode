@@ -21,7 +21,7 @@ titleabstract_mapping:
   landslide:
     - 'landslides - mudslides'
   flood:
-    - floods
+    - 'floods - storm surges'
   drought:
     - droughts
   'emergency levels':
