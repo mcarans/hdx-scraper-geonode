@@ -64,7 +64,7 @@ class TestGeoNodeToHDX:
         Country.countriesdata(False)
         Vocabulary._tags_dict = True
         Vocabulary._approved_vocabulary = {
-            'tags': [{'name': 'geodata'}, {'name': 'populated places - settlements'}, {'name': 'land use and land cover'}, {'name': 'erosion'}, {'name': 'landslides - mudslides'}, {'name': 'floods'}, {'name': 'droughts'}, {'name': 'food assistance'}, {'name': 'hazards and risk'}, {'name': 'administrative divisions'}, {'name': 'food security'}, {'name': 'security'}, {'name': 'displaced persons locations - camps - shelters'}, {'name': 'refugees'}, {'name': 'internally displaced persons - idp'}, {'name': 'malnutrition'}, {'name': 'nutrition'}, {'name': 'food assistance'}, {'name': 'roads'}, {'name': 'transportation'}, {'name': 'aviation'}, {'name': 'facilities and infrastructure'}, {'name': 'bridges'}, {'name': 'transportation'}, {'name': 'facilities and infrastructure'}, {'name': 'cold waves'}, {'name': 'cash assistance'}, {'name': 'acronyms'}],
+            'tags': [{'name': 'geodata'}, {'name': 'populated places - settlements'}, {'name': 'land use and land cover'}, {'name': 'erosion'}, {'name': 'landslides - mudslides'}, {'name': 'floods - storm surges'}, {'name': 'droughts'}, {'name': 'food assistance'}, {'name': 'hazards and risk'}, {'name': 'administrative divisions'}, {'name': 'food security'}, {'name': 'security'}, {'name': 'displaced persons locations - camps - shelters'}, {'name': 'refugees'}, {'name': 'internally displaced persons - idp'}, {'name': 'malnutrition'}, {'name': 'nutrition'}, {'name': 'food assistance'}, {'name': 'roads'}, {'name': 'transportation'}, {'name': 'aviation'}, {'name': 'facilities and infrastructure'}, {'name': 'bridges'}, {'name': 'transportation'}, {'name': 'facilities and infrastructure'}, {'name': 'cold waves'}, {'name': 'cash assistance'}, {'name': 'acronyms'}],
             'id': '4e61d464-4943-4e97-973a-84673c1aaa87', 'name': 'approved'}
 
     @pytest.fixture(scope='function')
@@ -251,7 +251,7 @@ class TestGeoNodeToHDX:
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                            'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                            'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'acronyms', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
-                                    {'name': 'landslides - mudslides', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'floods', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
+                                    {'name': 'landslides - mudslides', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'floods - storm surges', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'droughts', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'hazards and risk', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'food assistance', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'cold waves', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'erosion', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'roads', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
