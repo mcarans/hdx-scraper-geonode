@@ -118,7 +118,7 @@ class TestGeoNodeToHDX:
     def test_generate_dataset_and_showcase(self, configuration, downloader):
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[0], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP')
-        assert dataset == {'name': 'wfp-ica-sudan-2018-land-degradation-2001-2013',
+        assert dataset == {'name': 'wfp-geonode-sdn-ica-landdegradation-geonode',
                            'title': 'ICA Sudan, 2018 - Land Degradation, 2001-2013',
                            'notes': 'This layer contains...', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e',
                            'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'dataset_date': '11/22/2018',
@@ -134,7 +134,7 @@ class TestGeoNodeToHDX:
                               'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Asdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                               'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                               'resource_type': 'api', 'url_type': 'api'}]
-        assert showcase == {'name': 'wfp-ica-sudan-2018-land-degradation-2001-2013-showcase',
+        assert showcase == {'name': 'wfp-geonode-sdn-ica-landdegradation-geonode-showcase',
                             'title': 'ICA Sudan, 2018 - Land Degradation, 2001-2013',
                             'notes': 'This layer contains...', 'url': 'http://xxx/layers/geonode%3Asdn_ica_landdegradation_geonode_20180201',
                             'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-3c418668-ee6f-11e8-81a9-005056822e38-thumb.png',
@@ -142,7 +142,7 @@ class TestGeoNodeToHDX:
                                      {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
 
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[1], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP')
-        assert dataset == {'name': 'wfp-ica-sudan-2018-most-predominant-livelihood-zones-2014',
+        assert dataset == {'name': 'wfp-geonode-sdn-ica-predlhz-geonode',
                            'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014',
                            'notes': 'This layer contains...', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e',
                            'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'dataset_date': '11/22/2018',
@@ -158,7 +158,7 @@ class TestGeoNodeToHDX:
                               'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Asdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                               'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                               'resource_type': 'api', 'url_type': 'api'}]
-        assert showcase == {'name': 'wfp-ica-sudan-2018-most-predominant-livelihood-zones-2014-showcase',
+        assert showcase == {'name': 'wfp-geonode-sdn-ica-predlhz-geonode-showcase',
                             'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014',
                             'notes': 'This layer contains...', 'url': 'http://xxx/layers/geonode%3Asdn_ica_predlhz_geonode_20180201',
                             'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png',
@@ -167,7 +167,7 @@ class TestGeoNodeToHDX:
 
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
-        assert dataset == {'name': 'mimu-myanmar-town-2019-july', 'title': 'Myanmar Town 2019 July',
+        assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july', 'title': 'Myanmar Town 2019 July',
                            'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081',
                            'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'dataset_date': '08/05/2019',
@@ -183,7 +183,7 @@ class TestGeoNodeToHDX:
                               'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Ammr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                               'description': 'GeoJSON file. Towns are urban areas divided into wards.',
                               'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}]
-        assert showcase == {'name': 'mimu-myanmar-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July',
+        assert showcase == {'name': 'mimu-geonode-mmr-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July',
                             'notes': 'Towns are urban areas divided into wards.',
                             'url': 'http://yyy/layers/geonode%3Ammr_town_2019_july',
                             'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png',
@@ -192,7 +192,7 @@ class TestGeoNodeToHDX:
                                       'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
 
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[1], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
-        assert dataset == {'name': 'mimu-myanmar-2002-2014-forest-cover-change',
+        assert dataset == {'name': 'mimu-geonode-myan-lvl2-smoothed-dec2015-resamp',
                            'title': 'Myanmar 2002-2014 Forest Cover Change',
                            'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081',
@@ -209,7 +209,7 @@ class TestGeoNodeToHDX:
                               'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Amyan_lvl2_smoothed_dec2015_resamp&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                               'description': 'GeoJSON file. A Landsat-based classification of Myanmar’s forest cover',
                               'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}]
-        assert showcase == {'name': 'mimu-myanmar-2002-2014-forest-cover-change-showcase',
+        assert showcase == {'name': 'mimu-geonode-myan-lvl2-smoothed-dec2015-resamp-showcase',
                             'title': 'Myanmar 2002-2014 Forest Cover Change',
                             'notes': 'A Landsat-based classification of Myanmar’s forest cover',
                             'url': 'http://yyy/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp',
@@ -240,13 +240,12 @@ class TestGeoNodeToHDX:
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
         assert dataset is None
         assert showcase is None
-        layersdata['title'] = '%s %s' % (title, 'x' * 90)
         geonodetohdx.get_category_mapping()['Location'] = 'acronyms'
         geonodetohdx.get_titleabstract_mapping()['ffa'] = ['cash assistance']
         layersdata['abstract'] = '%s landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion' % abstract
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
-        assert dataset == {'name': 'mimu-myanmar-town-2019-july-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                           'title': 'Myanmar Town 2019 July xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
+                           'title': 'Myanmar Town 2019 July',
                            'notes': 'Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                            'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
@@ -263,8 +262,8 @@ class TestGeoNodeToHDX:
                                     {'name': 'cash assistance', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
         layersdata['abstract'] = '%s security nutrition' % abstract
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
-        assert dataset == {'name': 'mimu-myanmar-town-2019-july-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                           'title': 'Myanmar Town 2019 July xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
+                           'title': 'Myanmar Town 2019 July',
                            'notes': 'Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                            'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],

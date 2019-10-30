@@ -7,10 +7,10 @@ GeoNode Utilities:
 Reads from GeoNode servers and creates datasets.
 
 """
-
+from datetime import datetime
 import logging
 from typing import List, Dict, Optional, Tuple, Union
-from six.moves.urllib.parse import quote_plus
+from six.moves.urllib.parse import quote_plus, unquote_plus
 
 from hdx.data.dataset import Dataset
 from hdx.data.resource import Resource
@@ -179,10 +179,14 @@ class GeoNodeToHDX(object):
                 logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
                 return None, None
         logger.info('Creating dataset: %s' % title)
-        name = '%s %s' % (orgname, title)
-        slugified_name = slugify(name).lower()
-        if len(slugified_name) > 90:
-            slugified_name = slugified_name[:90]
+        typename = layer['detail_url'].rsplit('/', 1)[-1]
+        slugified_name = slugify(unquote_plus('%s_%s' % (orgname, typename)))
+        try:
+            datetime.strptime(slugified_name[-8:], '%Y%m%d')
+            if slugified_name[-9] == '-':
+                slugified_name = slugified_name[:-9]
+        except ValueError:
+            pass
         supplemental_information = layer['supplemental_information']
         if supplemental_information.lower()[:7] == 'no info':
             dataset_notes = notes
@@ -223,7 +227,6 @@ class GeoNodeToHDX(object):
                         tags.extend(mapping['else'])
         dataset.add_tags(tags)
         srid = quote_plus(layer['srid'])
-        typename = layer['detail_url'].rsplit('/', 1)[-1]
         resource = Resource({
             'name': '%s shapefile' % title,
             'url': '%s/geoserver/wfs?format_options=charset:UTF-8&typename=%s&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature' % (self.geonode_url, typename),
