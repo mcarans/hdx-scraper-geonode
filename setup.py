@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 from hdx.utilities.loader import load_file_to_str
 
-requirements = ['hdx-python-api>=3.8.5']
+requirements = ['hdx-python-api>=3.8.7']
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
