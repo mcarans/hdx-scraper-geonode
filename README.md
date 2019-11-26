@@ -11,16 +11,33 @@ library is here: <https://github.com/ocha-dap/hdx-scraper-geonode>.
 
 ## GeoNodeToHDX Class
 
-You should create an object of the GeoNodeToHDX class which has methods:
-get_locationsdata, get_layersdata, generate_dataset_and_showcase.
-
+You should create an object of the GeoNodeToHDX class:
+ 
     geonodetohdx = GeoNodeToHDX('https://geonode.wfp.org', downloader)
+    geonodetohdx = GeoNodeToHDX('https://geonode.themimu.info', downloader)
+
+It has high level methods generate_datasets_and_showcases and 
+delete_other_datasets:
+
+    # generate datasets and showcases reading country and layer information from the GeoNode
+    datasets = generate_datasets_and_showcases('maintainerid', 'orgid', 'orgname', updatefreq='Adhoc', 
+                                               subnational=True)
+    # generate datasets and showcases reading layer information ignoring region (country) in layers call
+    countrydata = {'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}
+    datasets = generate_datasets_and_showcases('maintainerid', 'orgid', 'orgname', updatefreq='Adhoc', 
+                                               subnational=True, countrydata=countrydata)
+    # delete any datasets and associated showcases from HDX that are not in the list datasets
+    # (assuming matching organisation id, maintainer id and geonode url in the resource url)
+    delete_other_datasets(datasets)
+
+If you need more fine grained control, it has low level methods
+get_locationsdata, get_layersdata, generate_dataset_and_showcase:
+
     # get countries where count > 0
     countries = geonodetohdx.get_countries(use_count=True)
     # get layers for country with ISO 3 code SDN
     layers = geonodetohdx.get_layers(countryiso='SDN')
     # get layers for all countries
-    geonodetohdx = GeoNodeToHDX('https://geonode.themimu.info', downloader)
     layers = get_layers(countryiso=None)
 
 There are default terms to be ignored and mapped. These can be overridden by

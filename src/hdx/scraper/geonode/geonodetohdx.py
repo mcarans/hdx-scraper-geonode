@@ -32,7 +32,9 @@ def create_dataset_showcase(dataset, showcase):
 
 
 def delete_from_hdx(dataset):
-    logger.info('Deleting %s' % dataset['title'])
+    logger.info('Deleting %s and any associated showcases' % dataset['title'])
+    for showcase in dataset.get_showcases():
+        showcase.delete_from_hdx()
     dataset.delete_from_hdx()
 
 
@@ -303,7 +305,8 @@ class GeoNodeToHDX(object):
     def delete_other_datasets(self, datasets_to_keep, delete_from_hdx=delete_from_hdx):
         # type: (List[Dataset], Callable[[Dataset], None]) -> None
         """
-        Delete all GeoNode datasets in HDX that have been deleted from the GeoNode server
+        Delete all GeoNode datasets and associated showcases in HDX where layers have been deleted from
+        the GeoNode server.
 
         Args:
             datasets_to_keep (List[Dataset]): List of datasets that are to be kept (they were added or updated)
