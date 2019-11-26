@@ -83,6 +83,10 @@ class TestGeoNodeToHDX:
                       'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                       'resource_type': 'api', 'url_type': 'api'}]]
 
+    wfporganization = {'description': "WFP is the world's largest humanitarian agency fighting hunger worldwide...", 'created': '2014-10-24T15:55:52.696098',
+                       'title': 'WFP - World Food Programme', 'name': 'wfp', 'is_organization': True, 'state': 'active', 'image_url': '',
+                       'revision_id': 'befd2a5c-7eff-4897-b459-80b00efbf678', 'type': 'organization', 'id': '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'approval_status': 'approved'}
+
     wfpshowcases = [{'name': 'wfp-geonode-sdn-ica-landdegradation-geonode-showcase', 'title': 'ICA Sudan, 2018 - Land Degradation, 2001-2013',
                      'notes': 'This layer contains...', 'url': 'http://xxx/layers/geonode%3Asdn_ica_landdegradation_geonode_20180201',
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-3c418668-ee6f-11e8-81a9-005056822e38-thumb.png',
@@ -120,6 +124,10 @@ class TestGeoNodeToHDX:
                        'description': 'GeoJSON file. A Landsat-based classification of Myanmar’s forest cover',
                        'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}]]
 
+    mimuorganization = {'description': 'The Myanmar Information Management Unit / MIMU is a service to the UN Country Team and Humanitarian Country Team...',
+                        'created': '2015-12-09T09:21:45.264734', 'title': 'Myanmar Information Management Unit (MIMU)', 'name': 'mimu', 'is_organization': True, 'state': 'active',
+                        'image_url': '', 'revision_id': '7e5161d3-fdd6-4436-ba04-1a65740e21e0', 'type': 'organization', 'id': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'approval_status': 'approved'}
+
     mimushowcases = [{'name': 'mimu-geonode-mmr-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July',
                       'notes': 'Towns are urban areas divided into wards.', 'url': 'http://yyy/layers/geonode%3Ammr_town_2019_july',
                       'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png',
@@ -130,12 +138,14 @@ class TestGeoNodeToHDX:
                       'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     @staticmethod
-    def construct_dataset(origdata, origresources, maintainer=None, orgid=None):
+    def construct_dataset(origdata, origresources, maintainer=None, orgid=None, organization=None):
         dataset = Dataset(copy.deepcopy(origdata))
         if maintainer:
             dataset['maintainer'] = maintainer
         if orgid:
             dataset['owner_org'] = orgid
+        if organization:
+            dataset['organization'] = organization
         dataset.add_update_resources(copy.deepcopy(origresources))
         return dataset
 
@@ -187,7 +197,7 @@ class TestGeoNodeToHDX:
     def search_datasets(self, monkeypatch):
 
         def search_in_hdx(fq):
-            if '3ecac442-7fed-448d-8f78-b385ef6f84e7' in fq:
+            if 'wfp' in fq:
                 return [self.construct_dataset(dataset, resources) for dataset, resources in
                         zip((self.wfpdatasets + self.mimudatasets), (self.wfpresources+self.mimuresources))]
             else:
@@ -320,14 +330,14 @@ class TestGeoNodeToHDX:
         def delete_from_hdx(dataset):
             datasets.append(dataset)
 
-        wfpdatasets = [self.construct_dataset(dataset, resources) for dataset, resources in
-                       zip(self.wfpdatasets, self.wfpresources)]
+        wfpdatasets = [self.construct_dataset(dataset, resources, organization=self.wfporganization)
+                       for dataset, resources in zip(self.wfpdatasets, self.wfpresources)]
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
         geonodetohdx.delete_other_datasets(wfpdatasets, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
 
-        mimudatasets = [self.construct_dataset(dataset, resources) for dataset, resources in
-                        zip(self.mimudatasets, self.mimuresources)]
+        mimudatasets = [self.construct_dataset(dataset, resources, organization=self.mimuorganization)
+                        for dataset, resources in zip(self.mimudatasets, self.mimuresources)]
         geonodetohdx.delete_other_datasets(mimudatasets, delete_from_hdx=delete_from_hdx)
         assert datasets[0]['name'] == self.wfpdatasets[0]['name']
         assert datasets[1]['name'] == self.wfpdatasets[1]['name']
