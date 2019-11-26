@@ -194,7 +194,7 @@ class TestGeoNodeToHDX:
                 return [self.construct_dataset(dataset, resources, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9') for dataset, resources in
                         zip((self.wfpdatasets + self.mimudatasets), (self.wfpresources + self.mimuresources))]
 
-        monkeypatch.setattr(Dataset, 'search_in_hdx', search_in_hdx)
+        monkeypatch.setattr(Dataset, 'search_in_hdx', staticmethod(search_in_hdx))
 
     def test_get_countries(self, configuration, downloader):
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
