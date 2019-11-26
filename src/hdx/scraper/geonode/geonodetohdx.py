@@ -318,7 +318,7 @@ class GeoNodeToHDX(object):
         """
         first_dataset = datasets_to_keep[0]
         dataset_names = [dataset['name'] for dataset in datasets_to_keep]
-        for dataset in Dataset.search_in_hdx(fq=first_dataset['owner_org']):
+        for dataset in Dataset.search_in_hdx(fq='organization:%s' % first_dataset['owner_org']):
             if dataset['maintainer'] != first_dataset['maintainer']:
                 continue
             if dataset['name'] in dataset_names:
