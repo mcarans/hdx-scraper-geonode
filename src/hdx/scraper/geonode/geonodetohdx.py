@@ -10,6 +10,8 @@ Reads from GeoNode servers and creates datasets.
 from datetime import datetime
 import logging
 from typing import List, Dict, Optional, Tuple, Union, Callable
+
+from dateutil.parser import parse
 from six.moves.urllib.parse import quote_plus, unquote_plus
 
 from hdx.data.dataset import Dataset
@@ -192,6 +194,13 @@ class GeoNodeToHDX(object):
             if term in abstract:
                 logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
                 return None, None
+        try:
+            parsed_title = parse(title, fuzzy_with_tokens=True)
+            newtitle = ''.join(parsed_title[1]).strip().replace('  ', ' ')
+            logger.info('Stripping date from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+        except:
+            pass
         logger.info('Creating dataset: %s' % title)
         typename = layer['detail_url'].rsplit('/', 1)[-1]
         slugified_name = slugify(unquote_plus('%s_%s' % (orgname, typename)))

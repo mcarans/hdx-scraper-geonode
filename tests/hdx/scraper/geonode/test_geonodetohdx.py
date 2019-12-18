@@ -96,7 +96,7 @@ class TestGeoNodeToHDX:
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png',
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
-    mimudatasets = [{'name': 'mimu-geonode-mmr-town-2019-july', 'title': 'Myanmar Town 2019 July',
+    mimudatasets = [{'name': 'mimu-geonode-mmr-town-2019-july', 'title': 'Myanmar Town',
                      'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                      'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                      'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
@@ -107,11 +107,11 @@ class TestGeoNodeToHDX:
                      'dataset_date': '02/12/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
-    mimuresources = [[{'name': 'Myanmar Town 2019 July shapefile',
+    mimuresources = [[{'name': 'Myanmar Town shapefile',
                        'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode%3Ammr_town_2019_july&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'Zipped Shapefile. Towns are urban areas divided into wards.',
                        'format': 'zipped shapefile', 'resource_type': 'api', 'url_type': 'api'},
-                      {'name': 'Myanmar Town 2019 July geojson',
+                      {'name': 'Myanmar Town geojson',
                        'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Ammr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'GeoJSON file. Towns are urban areas divided into wards.',
                        'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}],
@@ -128,7 +128,7 @@ class TestGeoNodeToHDX:
                         'created': '2015-12-09T09:21:45.264734', 'title': 'Myanmar Information Management Unit (MIMU)', 'name': 'mimu', 'is_organization': True, 'state': 'active',
                         'image_url': '', 'revision_id': '7e5161d3-fdd6-4436-ba04-1a65740e21e0', 'type': 'organization', 'id': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'approval_status': 'approved'}
 
-    mimushowcases = [{'name': 'mimu-geonode-mmr-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July',
+    mimushowcases = [{'name': 'mimu-geonode-mmr-town-2019-july-showcase', 'title': 'Myanmar Town',
                       'notes': 'Towns are urban areas divided into wards.', 'url': 'http://yyy/layers/geonode%3Ammr_town_2019_july',
                       'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png',
                       'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
@@ -275,7 +275,7 @@ class TestGeoNodeToHDX:
         layersdata['abstract'] = '%s landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion' % abstract
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
         assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
-                           'title': 'Myanmar Town 2019 July',
+                           'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                            'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
@@ -293,7 +293,7 @@ class TestGeoNodeToHDX:
         layersdata['abstract'] = '%s security nutrition' % abstract
         dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
         assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
-                           'title': 'Myanmar Town 2019 July',
+                           'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                            'dataset_date': '08/05/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
