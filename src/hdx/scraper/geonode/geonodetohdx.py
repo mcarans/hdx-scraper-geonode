@@ -7,6 +7,7 @@ GeoNode Utilities:
 Reads from GeoNode servers and creates datasets.
 
 """
+import re
 from datetime import datetime
 import logging
 from typing import List, Dict, Optional, Tuple, Union, Callable
@@ -72,7 +73,7 @@ class GeoNodeToHDX(object):
 
     def __init__(self, geonode_url, downloader, hdx_geonode_config_yaml=None):
         # type: (str, Download, Optional[str]) -> None
-        self.geonode_url = geonode_url
+        self.geonode_urls = [geonode_url]
         self.downloader = downloader
         base_hdx_geonode_config_yaml = script_dir_plus_file('hdx_geonode.yml', GeoNodeToHDX)
         geonode_config = load_yaml(base_hdx_geonode_config_yaml)
@@ -127,7 +128,7 @@ class GeoNodeToHDX(object):
             List[Tuple]: List of countries in form (iso3 code, name)
 
         """
-        response = self.downloader.download('%s/api/regions' % self.geonode_url)
+        response = self.downloader.download('%s/api/regions' % self.geonode_urls[0])
         jsonresponse = response.json()
         countries = list()
         for location in jsonresponse['objects']:
@@ -164,13 +165,29 @@ class GeoNodeToHDX(object):
             regionstr = ''
         else:
             regionstr = '/?regions__code__in=%s' % countryiso
-        response = self.downloader.download('%s/api/layers%s' % (self.geonode_url, regionstr))
+        response = self.downloader.download('%s/api/layers%s' % (self.geonode_urls[0], regionstr))
         jsonresponse = response.json()
         return jsonresponse['objects']
 
+    @staticmethod
+    def clean_title(title):
+        title = title.strip()
+        newtitle = re.sub('[\(\[].*?[\)\]]', '', title).strip()  # remove stuff in brackets and parentheses
+        if title != newtitle:
+            logger.info('Stripping stuff between brackets from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+        try:
+            parsed_title = parse(title, fuzzy_with_tokens=True)
+            newtitle = ''.join(parsed_title[1]).strip().replace('  ', ' ')
+            logger.info('Stripping date from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+        except:
+            pass
+        return title
+
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
-                                      subnational=True):
-        # type: (str, Dict, str, str, str, str, bool) -> Tuple[Optional[Dataset],Optional[Showcase]]
+                                      subnational=True, clean_title=False):
+        # type: (str, Dict, str, str, str, str, bool, bool) -> Tuple[Optional[Dataset],Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
 
@@ -182,6 +199,7 @@ class GeoNodeToHDX(object):
             orgname (str): Organisation name
             updatefreq (str): Update frequency. Defaults to Adhoc.
             subnational (bool): Subnational. Default to True.
+            clean_title (bool): Whether to remove dates from title. Defaults to False.
 
         Returns:
             Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
@@ -194,15 +212,13 @@ class GeoNodeToHDX(object):
             if term in abstract:
                 logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
                 return None, None
-        try:
-            parsed_title = parse(title, fuzzy_with_tokens=True)
-            newtitle = ''.join(parsed_title[1]).strip().replace('  ', ' ')
-            logger.info('Stripping date from title: %s -> %s' % (title, newtitle))
-            title = newtitle
-        except:
-            pass
+        if clean_title:
+            title = self.clean_title(title)
+        else:
+            title = title.strip()
         logger.info('Creating dataset: %s' % title)
-        typename = layer['detail_url'].rsplit('/', 1)[-1]
+        detail_url = layer['detail_url']
+        typename = 'geonode:%s' % detail_url.rsplit('geonode%3A', 1)[-1]
         slugified_name = slugify(unquote_plus('%s_%s' % (orgname, typename)))
         try:
             datetime.strptime(slugified_name[-8:], '%Y%m%d')
@@ -250,16 +266,22 @@ class GeoNodeToHDX(object):
                         tags.extend(mapping['else'])
         dataset.add_tags(tags)
         srid = quote_plus(layer['srid'])
+        if '%3Ageonode%3A' in detail_url:
+            geonode_url = 'https://%s' % detail_url.rsplit('/', 1)[-1].split('%3Ageonode%3A')[0]
+            if geonode_url not in self.geonode_urls:
+                self.geonode_urls.append(geonode_url)
+        else:
+            geonode_url = self.geonode_urls[0]
         resource = Resource({
             'name': '%s shapefile' % title,
-            'url': '%s/geoserver/wfs?format_options=charset:UTF-8&typename=%s&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature' % (self.geonode_url, typename),
+            'url': '%s/geoserver/wfs?format_options=charset:UTF-8&typename=%s&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature' % (geonode_url, typename),
             'description': 'Zipped Shapefile. %s' % notes
         })
         resource.set_file_type('zipped shapefile')
         dataset.add_update_resource(resource)
         resource = Resource({
             'name': '%s geojson' % title,
-            'url': '%s/geoserver/wfs?srsName=%s&typename=%s&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature' % (self.geonode_url, srid, typename),
+            'url': '%s/geoserver/wfs?srsName=%s&typename=%s&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature' % (geonode_url, srid, typename),
             'description': 'GeoJSON file. %s' % notes
         })
         resource.set_file_type('GeoJSON')
@@ -269,15 +291,15 @@ class GeoNodeToHDX(object):
             'name': '%s-showcase' % slugified_name,
             'title': title,
             'notes': notes,
-            'url': '%s%s' % (self.geonode_url, layer['detail_url']),
+            'url': '%s%s' % (self.geonode_urls[0], detail_url),
             'image_url': layer['thumbnail_url']
         })
         showcase.add_tags(tags)
         return dataset, showcase
 
     def generate_datasets_and_showcases(self, maintainerid, orgid, orgname, updatefreq='Adhoc', subnational=True,
-                                        create_dataset_showcase=create_dataset_showcase, countrydata=None):
-        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]]) -> List[Dataset]
+                                        create_dataset_showcase=create_dataset_showcase, countrydata=None, clean_title=False):
+        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool) -> List[Dataset]
         """
         Generate datasets and showcases for all GeoNode layers
 
@@ -289,6 +311,7 @@ class GeoNodeToHDX(object):
             subnational (bool): Subnational. Default to True.
             create_dataset_showcase (Callable[[Dataset, Showcase], None]): Function to call to create dataset and showcase
             countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
+            clean_title (bool): Whether to remove dates from title. Defaults to False.
 
         Returns:
             List[Dataset]: List of datasets added or updated
@@ -305,7 +328,7 @@ class GeoNodeToHDX(object):
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
                 dataset, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid, orgid,
-                                                                       orgname, updatefreq, subnational)
+                                                                       orgname, updatefreq, subnational, clean_title)
                 if dataset:
                     create_dataset_showcase(dataset, showcase)
                     datasets.append(dataset)
@@ -332,7 +355,7 @@ class GeoNodeToHDX(object):
                 continue
             if dataset['name'] in dataset_names:
                 continue
-            if self.geonode_url not in dataset.get_resource()['url']:
+            if not any(x in dataset.get_resource()['url'] for x in self.geonode_urls):
                 continue
             logger.info('Deleting %s' % dataset['title'])
             delete_from_hdx(dataset)

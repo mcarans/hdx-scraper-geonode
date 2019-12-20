@@ -50,7 +50,7 @@ class TestGeoNodeToHDX:
                       'title': 'ICA Sudan, 2018 - Land Degradation, 2001-2013', 'uuid': '3c418668-ee6f-11e8-81a9-005056822e38'},
                      {'abstract': 'This layer contains...', 'category__gn_description': 'Physical Features, Land Cover, Land Use, DEM',
                       'csw_type': 'dataset', 'csw_wkt_geometry': 'POLYGON(567)', 'date': '2018-11-22T16:18:00',
-                      'detail_url': '/layers/geonode%3Asdn_ica_predlhz_geonode_20180201', 'distribution_description': 'Web address (URL)',
+                      'detail_url': '/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201', 'distribution_description': 'Web address (URL)',
                       'distribution_url': 'https://geonode.wfp.org/layers/geonode%3Asdn_ica_predlhz_geonode_20180201',
                       'id': 9108, 'owner__username': 'stefano.cairo', 'popular_count': 208, 'rating': 0, 'share_count': 0, 'srid': 'EPSG:4326',
                       'supplemental_information': 'No information provided',
@@ -67,19 +67,19 @@ class TestGeoNodeToHDX:
                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     wfpresources = [[{'name': 'ICA Sudan, 2018 - Land Degradation, 2001-2013 shapefile',
-                      'url': 'http://xxx/geoserver/wfs?format_options=charset:UTF-8&typename=geonode%3Asdn_ica_landdegradation_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
+                      'url': 'http://xxx/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'Zipped Shapefile. This layer contains...', 'format': 'zipped shapefile',
                       'resource_type': 'api', 'url_type': 'api'},
                      {'name': 'ICA Sudan, 2018 - Land Degradation, 2001-2013 geojson',
-                      'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Asdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
+                      'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                       'resource_type': 'api', 'url_type': 'api'}],
                     [{'name': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014 shapefile',
-                      'url': 'http://xxx/geoserver/wfs?format_options=charset:UTF-8&typename=geonode%3Asdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
+                      'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'Zipped Shapefile. This layer contains...', 'format': 'zipped shapefile',
                       'resource_type': 'api', 'url_type': 'api'},
                      {'name': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014 geojson',
-                      'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Asdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
+                      'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                       'resource_type': 'api', 'url_type': 'api'}]]
 
@@ -92,7 +92,7 @@ class TestGeoNodeToHDX:
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-3c418668-ee6f-11e8-81a9-005056822e38-thumb.png',
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
                     {'name': 'wfp-geonode-sdn-ica-predlhz-geonode-showcase', 'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014',
-                     'notes': 'This layer contains...', 'url': 'http://xxx/layers/geonode%3Asdn_ica_predlhz_geonode_20180201',
+                     'notes': 'This layer contains...', 'url': 'http://xxx/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201',
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png',
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
@@ -108,19 +108,19 @@ class TestGeoNodeToHDX:
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     mimuresources = [[{'name': 'Myanmar Town shapefile',
-                       'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode%3Ammr_town_2019_july&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
+                       'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:mmr_town_2019_july&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'Zipped Shapefile. Towns are urban areas divided into wards.',
                        'format': 'zipped shapefile', 'resource_type': 'api', 'url_type': 'api'},
                       {'name': 'Myanmar Town geojson',
-                       'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Ammr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
+                       'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:mmr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'GeoJSON file. Towns are urban areas divided into wards.',
                        'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}],
                      [{'name': 'Myanmar 2002-2014 Forest Cover Change shapefile',
-                       'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode%3Amyan_lvl2_smoothed_dec2015_resamp&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
+                       'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'Zipped Shapefile. A Landsat-based classification of Myanmar’s forest cover',
                        'format': 'zipped shapefile', 'resource_type': 'api', 'url_type': 'api'},
                       {'name': 'Myanmar 2002-2014 Forest Cover Change geojson',
-                       'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode%3Amyan_lvl2_smoothed_dec2015_resamp&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
+                       'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'GeoJSON file. A Landsat-based classification of Myanmar’s forest cover',
                        'format': 'geojson', 'resource_type': 'api', 'url_type': 'api'}]]
 
@@ -223,26 +223,27 @@ class TestGeoNodeToHDX:
 
     def test_generate_dataset_and_showcase(self, configuration, downloader):
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[0], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[0], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP', clean_title=True)
         assert dataset == self.wfpdatasets[0]
         resources = dataset.get_resources()
         assert resources == self.wfpresources[0]
         assert showcase == self.wfpshowcases[0]
 
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[1], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[1], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP', clean_title=True)
         assert dataset == self.wfpdatasets[1]
         resources = dataset.get_resources()
         assert resources == self.wfpresources[1]
         assert showcase == self.wfpshowcases[1]
+        assert geonodetohdx.geonode_urls[1] == 'https://ogcserver.gis.wfp.org'
 
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset == self.mimudatasets[0]
         resources = dataset.get_resources()
         assert resources == self.mimuresources[0]
         assert showcase == self.mimushowcases[0]
 
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[1], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[1], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset == self.mimudatasets[1]
         resources = dataset.get_resources()
         assert resources == self.mimuresources[1]
@@ -253,27 +254,27 @@ class TestGeoNodeToHDX:
         layersdata = copy.deepcopy(TestGeoNodeToHDX.mimulayersdata[0])
         abstract = layersdata['abstract']
         layersdata['abstract'] = '%s deprecated' % abstract
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset is None
         assert showcase is None
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader, yaml_config)
         layersdata['abstract'] = '%s deprecated' % abstract
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset is not None
         assert showcase is not None
         layersdata['abstract'] = '%s abcd' % abstract
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset is None
         assert showcase is None
         layersdata['abstract'] = '%s hdx' % abstract
         geonodetohdx.get_ignore_data().append('hdx')
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset is None
         assert showcase is None
         geonodetohdx.get_category_mapping()['Location'] = 'acronyms'
         geonodetohdx.get_titleabstract_mapping()['ffa'] = ['cash assistance']
         layersdata['abstract'] = '%s landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion' % abstract
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
@@ -291,7 +292,7 @@ class TestGeoNodeToHDX:
                                     {'name': 'internally displaced persons - idp', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'malnutrition', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'cash assistance', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
         layersdata['abstract'] = '%s security nutrition' % abstract
-        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU')
+        dataset, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', clean_title=True)
         assert dataset == {'name': 'mimu-geonode-mmr-town-2019-july',
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.',
@@ -310,7 +311,7 @@ class TestGeoNodeToHDX:
             showcases.append(showcase)
 
         datasets_to_keep = geonodetohdx.generate_datasets_and_showcases('d7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP',
-                                                                        create_dataset_showcase=create_dataset_showcase)
+                                                                        create_dataset_showcase=create_dataset_showcase, clean_title=True)
         assert datasets == self.wfpdatasets
         assert showcases == self.wfpshowcases
         assert datasets_to_keep == datasets
@@ -319,7 +320,7 @@ class TestGeoNodeToHDX:
         datasets = list()
         showcases = list()
         datasets_to_keep = geonodetohdx.generate_datasets_and_showcases('196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU',
-                                                                        create_dataset_showcase=create_dataset_showcase, countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None})
+                                                                        create_dataset_showcase=create_dataset_showcase, countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, clean_title=True)
         assert datasets == self.mimudatasets
         assert showcases == self.mimushowcases
         assert datasets_to_keep == datasets
@@ -333,6 +334,7 @@ class TestGeoNodeToHDX:
         wfpdatasets = [self.construct_dataset(dataset, resources, organization=self.wfporganization)
                        for dataset, resources in zip(self.wfpdatasets, self.wfpresources)]
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
+        geonodetohdx.geonode_urls.append('https://ogcserver.gis.wfp.org')
         geonodetohdx.delete_other_datasets(wfpdatasets, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
 
@@ -345,3 +347,7 @@ class TestGeoNodeToHDX:
         datasets = list()
         geonodetohdx.delete_other_datasets(mimudatasets, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
+
+    def test_clean_title(self):
+        assert GeoNodeToHDX.clean_title('Myanmar Town 2019 July') == 'Myanmar Town'
+        assert GeoNodeToHDX.clean_title('Formal Sector School Location Upper Myanmar (2019)') == 'Formal Sector School Location Upper Myanmar'
