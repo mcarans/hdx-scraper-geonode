@@ -13,6 +13,7 @@ import logging
 from typing import List, Dict, Optional, Tuple, Union, Callable
 
 from dateutil.parser import parse
+from hdx.utilities.dateparse import parse_date_range, parse_date
 from six.moves.urllib.parse import quote_plus, unquote_plus
 
 from hdx.data.dataset import Dataset
@@ -70,6 +71,8 @@ class GeoNodeToHDX(object):
         downloader (Download): Download object from HDX Python Utilities
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
     """
+    YEAR_RANGE_PATTERN = re.compile('(\d\d\d\d)-(\d\d\d\d)')
+    BETWEEN_BRACKETS_PATTERN = re.compile('[\(\[](.*)[\)\]]')
 
     def __init__(self, geonode_url, downloader, hdx_geonode_config_yaml=None):
         # type: (str, Download, Optional[str]) -> None
@@ -170,23 +173,120 @@ class GeoNodeToHDX(object):
         return jsonresponse['objects']
 
     @staticmethod
-    def clean_title(title):
-        title = title.strip()
-        newtitle = re.sub('[\(\[].*?[\)\]]', '', title).strip()  # remove stuff in brackets and parentheses
-        if title != newtitle:
-            logger.info('Stripping stuff between brackets from title: %s -> %s' % (title, newtitle))
-            title = newtitle
+    def remove(string, toremove):
+        # type: (str, str, str) -> str
+        """
+        Remove string from another string and delete any preceding comma
+
+        Args:
+            string (str): String to process
+            toremove (str): String to remove
+
+        Returns:
+            str: String with other string removed
+
+        """
+        index = string.find(toremove)
+        newstring = string[:index].strip()
+        if newstring[-1] == ',':
+            newstring = newstring[:-1]
+        return ('%s%s' % (newstring, string[index + len(toremove):])).strip()
+
+
+    @staticmethod
+    def fuzzy_match(string):
+        # type: (str) -> Tuple[str,Optional[datetime],Optional[datetime]]
+        """
+        Fuzzy match date in string, returning string minus the date and start and end dates
+
+        Args:
+            string (str): String to parse
+
+        Returns:
+            Tuple[str,Optional[datetime],Optional[datetime]]: Cleaned string, start and end dates
+
+        """
+        startdate = None
+        enddate = None
+        retstring = None
         try:
-            parsed_title = parse(title, fuzzy_with_tokens=True)
-            newtitle = ''.join(parsed_title[1]).strip().replace('  ', ' ')
+            fuzzy = dict()
+            startdate, enddate = parse_date_range(string, fuzzy=fuzzy)
+            restofstring = fuzzy['nondate']
+            if restofstring:
+                retstring = restofstring[0]
+                if retstring[-1] == ',':
+                    retstring = retstring[:-1]
+                if len(retstring) > 1 and retstring[-1] == ' ' and retstring[-2] == ',':
+                    retstring = '%s ' % retstring[:-2]
+                if len(restofstring) > 1:
+                    endstring = ''.join(restofstring[1:])
+                    retstring = '%s%s' % (retstring, endstring)
+                retstring = retstring.strip().replace('  ', ' ')
+        except ValueError:
+            pass
+        return retstring, startdate, enddate
+
+    @classmethod
+    def get_date_from_title(cls, title, get_date_from_title=False):
+        # type: (str, bool) -> Tuple[str,Optional[datetime],Optional[datetime]]
+        """
+        Get dataset date from title and clean title of dates
+
+        Args:
+            title (str): Title to get date from and clean
+            get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
+
+        Returns:
+            Tuple[str,Optional[datetime],Optional[datetime]]: Cleaned title, start and end dates
+
+        """
+        startdate = None
+        enddate = None
+        title = title.strip()
+        if not get_date_from_title:
+            return title, startdate, enddate
+
+        match = cls.YEAR_RANGE_PATTERN.search(title)
+        if match is not None:
+            startdate = parse_date('%s-01-01' % match.group(1), '%Y-%m-%d')
+            enddate = parse_date('%s-12-31' % match.group(2), '%Y-%m-%d')
+            newtitle = cls.remove(title, match.group(0))
+            logger.info('Removing date range from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+
+        match = cls.BETWEEN_BRACKETS_PATTERN.search(title)
+        if match is not None:
+            string, sd, ed = cls.fuzzy_match(match.group(1))
+            if sd:
+                newtitle = cls.remove(title, match.group(0))
+                logger.info('Stripping date between brackets from title: %s -> %s' % (title, newtitle))
+                title = newtitle
+                if startdate is None:
+                    startdate = sd
+                    enddate = ed
+        newtitle, sd, ed = cls.fuzzy_match(title)
+        if sd:
             logger.info('Stripping date from title: %s -> %s' % (title, newtitle))
             title = newtitle
-        except:
-            pass
-        return title
+            if startdate is None:
+                startdate = sd
+                enddate = ed
+
+        def strip_from_end(string, things_to_strip):
+            for thing in things_to_strip:
+                position = -len(thing)
+                if string[position:] == thing:
+                    newstring = string[:position].strip()
+                    logger.info('Stripping - from title: %s -> %s' % (string, newstring))
+                    string = newstring
+            return string
+
+        title = strip_from_end(title, ['-', 'as of'])
+        return title, startdate, enddate
 
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
-                                      subnational=True, clean_title=False):
+                                      subnational=True, get_date_from_title=False):
         # type: (str, Dict, str, str, str, str, bool, bool) -> Tuple[Optional[Dataset],Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
@@ -199,7 +299,7 @@ class GeoNodeToHDX(object):
             orgname (str): Organisation name
             updatefreq (str): Update frequency. Defaults to Adhoc.
             subnational (bool): Subnational. Default to True.
-            clean_title (bool): Whether to remove dates from title. Defaults to False.
+            get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
 
         Returns:
             Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
@@ -212,10 +312,8 @@ class GeoNodeToHDX(object):
             if term in abstract:
                 logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
                 return None, None
-        if clean_title:
-            title = self.clean_title(title)
-        else:
-            title = title.strip()
+
+        title, startdate, enddate = self.get_date_from_title(title, get_date_from_title)
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
         typename = 'geonode:%s' % detail_url.rsplit('geonode%3A', 1)[-1]
@@ -238,7 +336,9 @@ class GeoNodeToHDX(object):
         })
         dataset.set_maintainer(maintainerid)
         dataset.set_organization(orgid)
-        dataset.set_dataset_date(layer['date'])
+        if startdate is None:
+            startdate = parse_date(layer['date'])
+        dataset.set_dataset_date_from_datetime(startdate, dataset_end_date=enddate)
         dataset.set_expected_update_frequency(updatefreq)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
@@ -298,7 +398,8 @@ class GeoNodeToHDX(object):
         return dataset, showcase
 
     def generate_datasets_and_showcases(self, maintainerid, orgid, orgname, updatefreq='Adhoc', subnational=True,
-                                        create_dataset_showcase=create_dataset_showcase, countrydata=None, clean_title=False):
+                                        create_dataset_showcase=create_dataset_showcase, countrydata=None,
+                                        get_date_from_title=False):
         # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool) -> List[Dataset]
         """
         Generate datasets and showcases for all GeoNode layers
@@ -311,7 +412,7 @@ class GeoNodeToHDX(object):
             subnational (bool): Subnational. Default to True.
             create_dataset_showcase (Callable[[Dataset, Showcase], None]): Function to call to create dataset and showcase
             countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
-            clean_title (bool): Whether to remove dates from title. Defaults to False.
+            get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
 
         Returns:
             List[Dataset]: List of datasets added or updated
@@ -328,7 +429,7 @@ class GeoNodeToHDX(object):
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
                 dataset, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid, orgid,
-                                                                       orgname, updatefreq, subnational, clean_title)
+                                                                       orgname, updatefreq, subnational, get_date_from_title)
                 if dataset:
                     create_dataset_showcase(dataset, showcase)
                     datasets.append(dataset)
