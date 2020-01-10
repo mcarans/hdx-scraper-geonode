@@ -14,6 +14,7 @@ from typing import List, Dict, Optional, Tuple, Union, Callable
 
 from dateutil.parser import parse
 from hdx.utilities.dateparse import parse_date_range, parse_date
+from hdx.utilities.text import remove_from_end
 from six.moves.urllib.parse import quote_plus, unquote_plus
 
 from hdx.data.dataset import Dataset
@@ -260,29 +261,20 @@ class GeoNodeToHDX(object):
             string, sd, ed = cls.fuzzy_match(match.group(1))
             if sd:
                 newtitle = cls.remove(title, match.group(0))
-                logger.info('Stripping date between brackets from title: %s -> %s' % (title, newtitle))
+                logger.info('Removing date between brackets from title: %s -> %s' % (title, newtitle))
                 title = newtitle
                 if startdate is None:
                     startdate = sd
                     enddate = ed
         newtitle, sd, ed = cls.fuzzy_match(title)
         if sd:
-            logger.info('Stripping date from title: %s -> %s' % (title, newtitle))
+            logger.info('Removing date from title: %s -> %s' % (title, newtitle))
             title = newtitle
             if startdate is None:
                 startdate = sd
                 enddate = ed
 
-        def strip_from_end(string, things_to_strip):
-            for thing in things_to_strip:
-                position = -len(thing)
-                if string[position:] == thing:
-                    newstring = string[:position].strip()
-                    logger.info('Stripping - from title: %s -> %s' % (string, newstring))
-                    string = newstring
-            return string
-
-        title = strip_from_end(title, ['-', 'as of'])
+        title = remove_from_end(title, ['-', 'as of'], 'Removing - from title: %s -> %s')
         return title, startdate, enddate
 
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
