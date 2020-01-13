@@ -324,6 +324,7 @@ class GeoNodeToHDX(object):
                 logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
                 return None, None
 
+        oldtitle = title
         title, startdate, enddate = self.get_date_from_title(title, get_date_from_title)
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
@@ -332,6 +333,8 @@ class GeoNodeToHDX(object):
             dataset_notes = notes
         else:
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
+        if oldtitle != title:
+            dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, oldtitle)
         slugified_name = slugify('%s_geonode_%s' % (orgname, title))
         slugified_name = process_dataset_name(slugified_name)
         dataset = Dataset({
