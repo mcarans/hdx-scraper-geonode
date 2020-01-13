@@ -14,7 +14,7 @@ from typing import List, Dict, Optional, Tuple, Union, Callable
 
 from hdx.utilities.dateparse import parse_date_range, parse_date
 from hdx.utilities.text import remove_from_end
-from six.moves.urllib.parse import quote_plus, unquote_plus
+from six.moves.urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
 from hdx.data.resource import Resource
@@ -72,6 +72,7 @@ class GeoNodeToHDX(object):
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
     """
     YEAR_RANGE_PATTERN = re.compile('(\d\d\d\d)-(\d\d\d\d)')
+    YEAR_RANGE_PATTERN2 = re.compile('(\d\d\d\d)/(\d\d)')
     YEAR_TWICE_PATTERN = re.compile('(\d\d\d\d).{4,}(\d\d\d\d)')
     BETWEEN_BRACKETS_PATTERN = re.compile('[\(\[](.*)[\)\]]')
 
@@ -256,6 +257,15 @@ class GeoNodeToHDX(object):
             logger.info('Removing date range from title: %s -> %s' % (title, newtitle))
             title = newtitle
 
+        match = cls.YEAR_RANGE_PATTERN2.search(title)
+        if match is not None:
+            first_year = match.group(1)
+            startdate = parse_date('%s-01-01' % first_year, '%Y-%m-%d')
+            enddate = parse_date('%s%s-12-31' % (first_year[:2], match.group(2)), '%Y-%m-%d')
+            newtitle = cls.remove(title, match.group(0))
+            logger.info('Removing date range from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+
         match = cls.BETWEEN_BRACKETS_PATTERN.search(title)
         if match is not None:
             string, sd, ed = cls.fuzzy_match(match.group(1))
@@ -337,6 +347,7 @@ class GeoNodeToHDX(object):
             dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, oldtitle)
         slugified_name = slugify('%s_geonode_%s' % (orgname, title))
         slugified_name = process_dataset_name(slugified_name)
+        slugified_name = slugified_name[:90]
         dataset = Dataset({
             'name': slugified_name,
             'title': title,

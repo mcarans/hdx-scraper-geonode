@@ -362,3 +362,4 @@ class TestGeoNodeToHDX:
         assert GeoNodeToHDX.get_date_from_title('Ward boundaries Yangon City_mimu_v8_1', True) == ('Ward boundaries Yangon City_mimu_v8_1', None, None)
         assert GeoNodeToHDX.get_date_from_title('Mon_State_Village_Tract_Boundaries', True) == ('Mon_State_Village_Tract_Boundaries', None, None)
         assert GeoNodeToHDX.get_date_from_title('ICA Afghanistan, 2019 - Landslide hazard, 2013', True) == ('ICA Afghanistan - Landslide hazard', datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0))
+        assert GeoNodeToHDX.get_date_from_title('Afghanistan Percentage of Food Insecure Population Based on Combined Food Consumption Score and Coping Strategy Index by Province - ALCS 2013/14', True) == ('Afghanistan Percentage of Food Insecure Population Based on Combined Food Consumption Score and Coping Strategy Index by Province - ALCS', datetime(2013, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0))
