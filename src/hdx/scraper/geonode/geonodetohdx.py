@@ -326,19 +326,12 @@ class GeoNodeToHDX(object):
         title, startdate, enddate = self.get_date_from_title(title, get_date_from_title)
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
-        typename = 'geonode:%s' % detail_url.rsplit('geonode%3A', 1)[-1]
-        slugified_name = slugify(unquote_plus('%s_%s' % (orgname, typename)))
-        try:
-            datetime.strptime(slugified_name[-8:], '%Y%m%d')
-            if slugified_name[-9] == '-':
-                slugified_name = slugified_name[:-9]
-        except ValueError:
-            pass
         supplemental_information = layer['supplemental_information']
         if supplemental_information.lower()[:7] == 'no info':
             dataset_notes = notes
         else:
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
+        slugified_name = slugify('%s_geonode_%s' % (orgname, title))
         dataset = Dataset({
             'name': slugified_name,
             'title': title,
@@ -382,6 +375,7 @@ class GeoNodeToHDX(object):
                 self.geonode_urls.append(geonode_url)
         else:
             geonode_url = self.geonode_urls[0]
+        typename = 'geonode:%s' % detail_url.rsplit('geonode%3A', 1)[-1]
         resource = Resource({
             'name': '%s shapefile' % title,
             'url': '%s/geoserver/wfs?format_options=charset:UTF-8&typename=%s&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature' % (geonode_url, typename),
