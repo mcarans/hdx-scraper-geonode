@@ -296,8 +296,8 @@ class GeoNodeToHDX(object):
         return title, startdate, enddate
 
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
-                                      subnational=True, get_date_from_title=False):
-        # type: (str, Dict, str, str, str, str, bool, bool) -> Tuple[Optional[Dataset],Optional[Showcase]]
+                                      subnational=True, get_date_from_title=False, process_dataset_name=lambda x: x):
+        # type: (str, Dict, str, str, str, str, bool, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
 
@@ -310,6 +310,7 @@ class GeoNodeToHDX(object):
             updatefreq (str): Update frequency. Defaults to Adhoc.
             subnational (bool): Subnational. Default to True.
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
+            process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
         Returns:
             Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
@@ -332,6 +333,7 @@ class GeoNodeToHDX(object):
         else:
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
         slugified_name = slugify('%s_geonode_%s' % (orgname, title))
+        slugified_name = process_dataset_name(slugified_name)
         dataset = Dataset({
             'name': slugified_name,
             'title': title,
