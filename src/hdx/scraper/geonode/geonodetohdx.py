@@ -12,7 +12,6 @@ from datetime import datetime
 import logging
 from typing import List, Dict, Optional, Tuple, Union, Callable
 
-from dateutil.parser import parse
 from hdx.utilities.dateparse import parse_date_range, parse_date
 from hdx.utilities.text import remove_from_end
 from six.moves.urllib.parse import quote_plus, unquote_plus
@@ -73,6 +72,7 @@ class GeoNodeToHDX(object):
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
     """
     YEAR_RANGE_PATTERN = re.compile('(\d\d\d\d)-(\d\d\d\d)')
+    YEAR_TWICE_PATTERN = re.compile('(\d\d\d\d).{4,}(\d\d\d\d)')
     BETWEEN_BRACKETS_PATTERN = re.compile('[\(\[](.*)[\)\]]')
 
     def __init__(self, geonode_url, downloader, hdx_geonode_config_yaml=None):
@@ -121,7 +121,7 @@ class GeoNodeToHDX(object):
         return self.titleabstract_mapping
 
     def get_countries(self, use_count=True):
-        # type: (bool) -> List[Tuple]
+        # type: (bool) -> List[Dict]
         """
         Get countries from GeoNode
 
@@ -129,7 +129,7 @@ class GeoNodeToHDX(object):
             use_count (bool): Whether to use null count metadata to exclude countries. Defaults to True.
 
         Returns:
-            List[Tuple]: List of countries in form (iso3 code, name)
+            List[Dict]: List of countries in form (iso3 code, name)
 
         """
         response = self.downloader.download('%s/api/regions' % self.geonode_urls[0])
@@ -175,7 +175,7 @@ class GeoNodeToHDX(object):
 
     @staticmethod
     def remove(string, toremove):
-        # type: (str, str, str) -> str
+        # type: (str, str) -> str
         """
         Remove string from another string and delete any preceding comma
 
@@ -266,6 +266,24 @@ class GeoNodeToHDX(object):
                 if startdate is None:
                     startdate = sd
                     enddate = ed
+
+        match = cls.YEAR_TWICE_PATTERN.search(title)
+        if match is not None:
+            first_year = match.group(1)
+            second_year = match.group(2)
+            first_startdate = parse_date('%s-01-01' % first_year, '%Y-%m-%d')
+            second_startdate = parse_date('%s-01-01' % second_year, '%Y-%m-%d')
+            if first_startdate > second_startdate:
+                startdate = second_startdate
+                enddate = parse_date('%s-12-31' % second_year, '%Y-%m-%d')
+            else:
+                startdate = first_startdate
+                enddate = parse_date('%s-12-31' % first_year, '%Y-%m-%d')
+            newtitle = cls.remove(title, first_year)
+            newtitle = cls.remove(newtitle, second_year)
+            logger.info('Removing two year values from title: %s -> %s' % (title, newtitle))
+            title = newtitle
+
         newtitle, sd, ed = cls.fuzzy_match(title)
         if sd:
             logger.info('Removing date from title: %s -> %s' % (title, newtitle))

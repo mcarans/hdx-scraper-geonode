@@ -62,9 +62,9 @@ class TestGeoNodeToHDX:
                     'notes': 'This layer contains...', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7',
                     'dataset_date': '01/01/2001-12/31/2013', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
-                   {'name': 'wfp-geonode-sdn-ica-predlhz-geonode', 'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014',
+                   {'name': 'wfp-geonode-sdn-ica-predlhz-geonode', 'title': 'ICA Sudan - Most Predominant Livelihood Zones',
                     'notes': 'This layer contains...', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7',
-                    'dataset_date': '11/22/2018', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
+                    'dataset_date': '01/01/2014-12/31/2014', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     wfpresources = [[{'name': 'ICA Sudan - Land Degradation shapefile',
@@ -75,11 +75,11 @@ class TestGeoNodeToHDX:
                       'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                       'resource_type': 'api', 'url_type': 'api'}],
-                    [{'name': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014 shapefile',
+                    [{'name': 'ICA Sudan - Most Predominant Livelihood Zones shapefile',
                       'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'Zipped Shapefile. This layer contains...', 'format': 'zipped shapefile',
                       'resource_type': 'api', 'url_type': 'api'},
-                     {'name': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014 geojson',
+                     {'name': 'ICA Sudan - Most Predominant Livelihood Zones geojson',
                       'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                       'description': 'GeoJSON file. This layer contains...', 'format': 'geojson',
                       'resource_type': 'api', 'url_type': 'api'}]]
@@ -92,7 +92,7 @@ class TestGeoNodeToHDX:
                      'notes': 'This layer contains...', 'url': 'http://xxx/layers/geonode%3Asdn_ica_landdegradation_geonode_20180201',
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-3c418668-ee6f-11e8-81a9-005056822e38-thumb.png',
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
-                    {'name': 'wfp-geonode-sdn-ica-predlhz-geonode-showcase', 'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014',
+                    {'name': 'wfp-geonode-sdn-ica-predlhz-geonode-showcase', 'title': 'ICA Sudan - Most Predominant Livelihood Zones',
                      'notes': 'This layer contains...', 'url': 'http://xxx/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201',
                      'image_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png',
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
@@ -361,3 +361,4 @@ class TestGeoNodeToHDX:
         assert GeoNodeToHDX.get_date_from_title('Kachin State and Sagaing Region 2002-2014 Forest Cover Change', True) == ('Kachin State and Sagaing Region Forest Cover Change', datetime(2002, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0))
         assert GeoNodeToHDX.get_date_from_title('Ward boundaries Yangon City_mimu_v8_1', True) == ('Ward boundaries Yangon City_mimu_v8_1', None, None)
         assert GeoNodeToHDX.get_date_from_title('Mon_State_Village_Tract_Boundaries', True) == ('Mon_State_Village_Tract_Boundaries', None, None)
+        assert GeoNodeToHDX.get_date_from_title('ICA Afghanistan, 2019 - Landslide hazard, 2013', True) == ('ICA Afghanistan - Landslide hazard', datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0))
