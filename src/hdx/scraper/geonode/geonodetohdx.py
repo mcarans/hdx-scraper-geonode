@@ -405,8 +405,8 @@ class GeoNodeToHDX(object):
 
     def generate_datasets_and_showcases(self, maintainerid, orgid, orgname, updatefreq='Adhoc', subnational=True,
                                         create_dataset_showcase=create_dataset_showcase, countrydata=None,
-                                        get_date_from_title=False):
-        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool) -> List[Dataset]
+                                        get_date_from_title=False, process_dataset_name=lambda x: x):
+        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool, Callable[[str], str]) -> List[Dataset]
         """
         Generate datasets and showcases for all GeoNode layers
 
@@ -419,6 +419,7 @@ class GeoNodeToHDX(object):
             create_dataset_showcase (Callable[[Dataset, Showcase], None]): Function to call to create dataset and showcase
             countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
+            process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
         Returns:
             List[Dataset]: List of datasets added or updated
@@ -435,7 +436,8 @@ class GeoNodeToHDX(object):
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
                 dataset, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid, orgid,
-                                                                       orgname, updatefreq, subnational, get_date_from_title)
+                                                                       orgname, updatefreq, subnational,
+                                                                       get_date_from_title, process_dataset_name)
                 if dataset:
                     create_dataset_showcase(dataset, showcase)
                     datasets.append(dataset)
