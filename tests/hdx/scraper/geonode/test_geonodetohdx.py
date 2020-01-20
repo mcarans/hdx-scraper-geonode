@@ -349,17 +349,3 @@ class TestGeoNodeToHDX:
         geonodetohdx.delete_other_datasets(mimudatasets, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
 
-    def test_get_date_from_title(self):
-        title = 'Myanmar Town 2019 July'
-        assert GeoNodeToHDX.get_date_from_title(title) == (title, None, None)
-        assert GeoNodeToHDX.get_date_from_title(title, get_date_from_title=True) == ('Myanmar Town', datetime(2019, 7, 1, 0, 0), datetime(2019, 7, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Formal Sector School Location Upper Myanmar (2019)', True) == ('Formal Sector School Location Upper Myanmar', datetime(2019, 1, 1, 0, 0), datetime(2019, 12, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('ICA Armenia, 2017 - Drought Risk, 1981-2015', True) == ('ICA Armenia - Drought Risk', datetime(1981, 1, 1, 0, 0), datetime(2015, 12, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Central African Republic, Bridges, January 2019', True) == ('Central African Republic, Bridges', datetime(2019, 1, 1, 0, 0), datetime(2019, 1, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Afghanistan:District Accessibility for WFP and Partners Staff as of 05 May 2019', True) == ('Afghanistan:District Accessibility for WFP and Partners Staff', datetime(2019, 5, 5, 0, 0), datetime(2019, 5, 5, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Tanintharyi Region Land Cover - March 2016 (Original)', True) == ('Tanintharyi Region Land Cover - (Original)', datetime(2016, 3, 1, 0, 0), datetime(2016, 3, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Kachin State and Sagaing Region 2002-2014 Forest Cover Change', True) == ('Kachin State and Sagaing Region Forest Cover Change', datetime(2002, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Ward boundaries Yangon City_mimu_v8_1', True) == ('Ward boundaries Yangon City_mimu_v8_1', None, None)
-        assert GeoNodeToHDX.get_date_from_title('Mon_State_Village_Tract_Boundaries', True) == ('Mon_State_Village_Tract_Boundaries', None, None)
-        assert GeoNodeToHDX.get_date_from_title('ICA Afghanistan, 2019 - Landslide hazard, 2013', True) == ('ICA Afghanistan - Landslide hazard', datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0))
-        assert GeoNodeToHDX.get_date_from_title('Afghanistan Percentage of Food Insecure Population Based on Combined Food Consumption Score and Coping Strategy Index by Province - ALCS 2013/14', True) == ('Afghanistan Percentage of Food Insecure Population Based on Combined Food Consumption Score and Coping Strategy Index by Province - ALCS', datetime(2013, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0))

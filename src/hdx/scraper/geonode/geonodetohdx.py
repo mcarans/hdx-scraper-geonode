@@ -7,13 +7,10 @@ GeoNode Utilities:
 Reads from GeoNode servers and creates datasets.
 
 """
-import re
-from datetime import datetime
 import logging
 from typing import List, Dict, Optional, Tuple, Union, Callable
 
-from hdx.utilities.dateparse import parse_date_range, parse_date
-from hdx.utilities.text import remove_from_end
+from hdx.utilities.dateparse import parse_date
 from six.moves.urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
@@ -71,11 +68,6 @@ class GeoNodeToHDX(object):
         downloader (Download): Download object from HDX Python Utilities
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
     """
-    YEAR_RANGE_PATTERN = re.compile('(\d\d\d\d)-(\d\d\d\d)')
-    YEAR_RANGE_PATTERN2 = re.compile('(\d\d\d\d)/(\d\d)')
-    YEAR_TWICE_PATTERN = re.compile('(\d\d\d\d).{4,}(\d\d\d\d)')
-    BETWEEN_BRACKETS_PATTERN = re.compile('[\(\[](.*)[\)\]]')
-
     def __init__(self, geonode_url, downloader, hdx_geonode_config_yaml=None):
         # type: (str, Download, Optional[str]) -> None
         self.geonode_urls = [geonode_url]
@@ -174,137 +166,6 @@ class GeoNodeToHDX(object):
         jsonresponse = response.json()
         return jsonresponse['objects']
 
-    @staticmethod
-    def remove(string, toremove):
-        # type: (str, str) -> str
-        """
-        Remove string from another string and delete any preceding comma
-
-        Args:
-            string (str): String to process
-            toremove (str): String to remove
-
-        Returns:
-            str: String with other string removed
-
-        """
-        index = string.find(toremove)
-        newstring = string[:index].strip()
-        if newstring[-1] == ',':
-            newstring = newstring[:-1]
-        return ('%s%s' % (newstring, string[index + len(toremove):])).strip()
-
-
-    @staticmethod
-    def fuzzy_match(string):
-        # type: (str) -> Tuple[str,Optional[datetime],Optional[datetime]]
-        """
-        Fuzzy match date in string, returning string minus the date and start and end dates
-
-        Args:
-            string (str): String to parse
-
-        Returns:
-            Tuple[str,Optional[datetime],Optional[datetime]]: Cleaned string, start and end dates
-
-        """
-        startdate = None
-        enddate = None
-        retstring = None
-        try:
-            fuzzy = dict()
-            startdate, enddate = parse_date_range(string, fuzzy=fuzzy)
-            restofstring = fuzzy['nondate']
-            if restofstring:
-                retstring = restofstring[0]
-                if retstring[-1] == ',':
-                    retstring = retstring[:-1]
-                if len(retstring) > 1 and retstring[-1] == ' ' and retstring[-2] == ',':
-                    retstring = '%s ' % retstring[:-2]
-                if len(restofstring) > 1:
-                    endstring = ''.join(restofstring[1:])
-                    retstring = '%s%s' % (retstring, endstring)
-                retstring = retstring.strip().replace('  ', ' ')
-        except ValueError:
-            pass
-        return retstring, startdate, enddate
-
-    @classmethod
-    def get_date_from_title(cls, title, get_date_from_title=False):
-        # type: (str, bool) -> Tuple[str,Optional[datetime],Optional[datetime]]
-        """
-        Get dataset date from title and clean title of dates
-
-        Args:
-            title (str): Title to get date from and clean
-            get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
-
-        Returns:
-            Tuple[str,Optional[datetime],Optional[datetime]]: Cleaned title, start and end dates
-
-        """
-        startdate = None
-        enddate = None
-        title = title.strip()
-        if not get_date_from_title:
-            return title, startdate, enddate
-
-        match = cls.YEAR_RANGE_PATTERN.search(title)
-        if match is not None:
-            startdate = parse_date('%s-01-01' % match.group(1), '%Y-%m-%d')
-            enddate = parse_date('%s-12-31' % match.group(2), '%Y-%m-%d')
-            newtitle = cls.remove(title, match.group(0))
-            logger.info('Removing date range from title: %s -> %s' % (title, newtitle))
-            title = newtitle
-
-        match = cls.YEAR_RANGE_PATTERN2.search(title)
-        if match is not None:
-            first_year = match.group(1)
-            startdate = parse_date('%s-01-01' % first_year, '%Y-%m-%d')
-            enddate = parse_date('%s%s-12-31' % (first_year[:2], match.group(2)), '%Y-%m-%d')
-            newtitle = cls.remove(title, match.group(0))
-            logger.info('Removing date range from title: %s -> %s' % (title, newtitle))
-            title = newtitle
-
-        match = cls.BETWEEN_BRACKETS_PATTERN.search(title)
-        if match is not None:
-            string, sd, ed = cls.fuzzy_match(match.group(1))
-            if sd:
-                newtitle = cls.remove(title, match.group(0))
-                logger.info('Removing date between brackets from title: %s -> %s' % (title, newtitle))
-                title = newtitle
-                if startdate is None:
-                    startdate = sd
-                    enddate = ed
-
-        match = cls.YEAR_TWICE_PATTERN.search(title)
-        if match is not None:
-            first_year = match.group(1)
-            second_year = match.group(2)
-            first_startdate = parse_date('%s-01-01' % first_year, '%Y-%m-%d')
-            second_startdate = parse_date('%s-01-01' % second_year, '%Y-%m-%d')
-            if first_startdate > second_startdate:
-                startdate = second_startdate
-                enddate = parse_date('%s-12-31' % second_year, '%Y-%m-%d')
-            else:
-                startdate = first_startdate
-                enddate = parse_date('%s-12-31' % first_year, '%Y-%m-%d')
-            newtitle = cls.remove(title, first_year)
-            newtitle = cls.remove(newtitle, second_year)
-            logger.info('Removing two year values from title: %s -> %s' % (title, newtitle))
-            title = newtitle
-
-        newtitle, sd, ed = cls.fuzzy_match(title)
-        if sd:
-            logger.info('Removing date from title: %s -> %s' % (title, newtitle))
-            title = newtitle
-            if startdate is None:
-                startdate = sd
-                enddate = ed
-
-        title = remove_from_end(title, ['-', 'as of'], 'Removing - from title: %s -> %s')
-        return title, startdate, enddate
-
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
                                       subnational=True, get_date_from_title=False, process_dataset_name=lambda x: x):
         # type: (str, Dict, str, str, str, str, bool, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[Showcase]]
@@ -326,16 +187,17 @@ class GeoNodeToHDX(object):
             Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
 
         """
-        title = layer['title']
+        origtitle = layer['title']
         notes = layer['abstract']
         abstract = notes.lower()
         for term in self.ignore_data:
             if term in abstract:
-                logger.warning('Ignoring %s as term %s present in abstract!' % (title, term))
+                logger.warning('Ignoring %s as term %s present in abstract!' % (origtitle, term))
                 return None, None
 
-        oldtitle = title
-        title, startdate, enddate = self.get_date_from_title(title, get_date_from_title)
+        dataset = Dataset({'title': origtitle})
+        dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
+        title = dataset['title']
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
         supplemental_information = layer['supplemental_information']
@@ -343,21 +205,17 @@ class GeoNodeToHDX(object):
             dataset_notes = notes
         else:
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
-        if oldtitle != title:
-            dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, oldtitle)
+        if origtitle == title:
+            dataset.set_dataset_date_from_datetime(parse_date(layer['date']))
+        else:
+            dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, origtitle)
         slugified_name = slugify('%s_geonode_%s' % (orgname, title))
         slugified_name = process_dataset_name(slugified_name)
         slugified_name = slugified_name[:90]
-        dataset = Dataset({
-            'name': slugified_name,
-            'title': title,
-            'notes': dataset_notes
-        })
+        dataset['name'] = slugified_name
+        dataset['notes'] = dataset_notes
         dataset.set_maintainer(maintainerid)
         dataset.set_organization(orgid)
-        if startdate is None:
-            startdate = parse_date(layer['date'])
-        dataset.set_dataset_date_from_datetime(startdate, dataset_end_date=enddate)
         dataset.set_expected_update_frequency(updatefreq)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
