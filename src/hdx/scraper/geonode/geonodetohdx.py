@@ -187,7 +187,7 @@ class GeoNodeToHDX(object):
             Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
 
         """
-        origtitle = layer['title']
+        origtitle = layer['title'].strip()
         notes = layer['abstract']
         abstract = notes.lower()
         for term in self.ignore_data:
