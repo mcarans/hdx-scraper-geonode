@@ -8,9 +8,11 @@ Reads from GeoNode servers and creates datasets.
 
 """
 import logging
+from collections import OrderedDict
+from datetime import datetime
 from typing import List, Dict, Optional, Tuple, Union, Callable
 
-from hdx.utilities.dateparse import parse_date
+from hdx.utilities.dateparse import parse_date, default_date
 from six.moves.urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
@@ -168,7 +170,7 @@ class GeoNodeToHDX(object):
 
     def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
                                       subnational=True, get_date_from_title=False, process_dataset_name=lambda x: x):
-        # type: (str, Dict, str, str, str, str, bool, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[Showcase]]
+        # type: (str, Dict, str, str, str, str, bool, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[List],Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
 
@@ -184,7 +186,7 @@ class GeoNodeToHDX(object):
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
         Returns:
-            Tuple[Optional[Dataset],Optional[Showcase]]: Dataset and Showcase objects or None, None
+            Tuple[Optional[Dataset],List,Optional[Showcase]]: Dataset, date ranges in dataset title and Showcase objects or None, None, None
 
         """
         origtitle = layer['title'].strip()
@@ -193,10 +195,10 @@ class GeoNodeToHDX(object):
         for term in self.ignore_data:
             if term in abstract:
                 logger.warning('Ignoring %s as term %s present in abstract!' % (origtitle, term))
-                return None, None
+                return None, None, None
 
         dataset = Dataset({'title': origtitle})
-        dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
+        ranges = dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
         title = dataset['title']
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
@@ -273,12 +275,12 @@ class GeoNodeToHDX(object):
             'image_url': layer['thumbnail_url']
         })
         showcase.add_tags(tags)
-        return dataset, showcase
+        return dataset, ranges, showcase
 
     def generate_datasets_and_showcases(self, maintainerid, orgid, orgname, updatefreq='Adhoc', subnational=True,
                                         create_dataset_showcase=create_dataset_showcase, countrydata=None,
                                         get_date_from_title=False, process_dataset_name=lambda x: x):
-        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool, Callable[[str], str]) -> List[Dataset]
+        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool, Callable[[str], str]) -> List[str]
         """
         Generate datasets and showcases for all GeoNode layers
 
@@ -294,7 +296,7 @@ class GeoNodeToHDX(object):
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
         Returns:
-            List[Dataset]: List of datasets added or updated
+            List[str]: List of names of datasets added or updated
 
         """
         if countrydata:
@@ -302,39 +304,47 @@ class GeoNodeToHDX(object):
         else:
             countries = self.get_countries()
             logger.info('Number of countries: %d' % len(countries))
-        datasets = list()
+        dataset_dates = dict()
         for countrydata in countries:
             layers = self.get_layers(countrydata['layers'])
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
-                dataset, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid, orgid,
-                                                                       orgname, updatefreq, subnational,
-                                                                       get_date_from_title, process_dataset_name)
+                dataset, ranges, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid,
+                                                                               orgid, orgname, updatefreq, subnational,
+                                                                               get_date_from_title, process_dataset_name)
                 if dataset:
+                    dataset_name = dataset['name']
+                    max_date = default_date
+                    for range in ranges:
+                        if range[1] > max_date:
+                            max_date = range[1]
+                    prev_max = dataset_dates.get(dataset_name)
+                    if prev_max and prev_max > max_date:
+                        continue
                     create_dataset_showcase(dataset, showcase)
-                    datasets.append(dataset)
-        return datasets
+                    dataset_dates[dataset_name] = max_date
+        return list(dataset_dates.keys())
 
-    def delete_other_datasets(self, datasets_to_keep, delete_from_hdx=delete_from_hdx):
-        # type: (List[Dataset], Callable[[Dataset], None]) -> None
+    def delete_other_datasets(self, datasets_to_keep, maintainerid, orgname, delete_from_hdx=delete_from_hdx):
+        # type: (List[str], str, str, Callable[[Dataset], None]) -> None
         """
         Delete all GeoNode datasets and associated showcases in HDX where layers have been deleted from
         the GeoNode server.
 
         Args:
-            datasets_to_keep (List[Dataset]): List of datasets that are to be kept (they were added or updated)
+            datasets_to_keep (List[str]): List of dataset names that are to be kept (they were added or updated)
+            maintainerid (str): Maintainer ID
+            orgname (str): Organisation name
             delete_from_hdx (Callable[[Dataset], None]): Function to call to delete dataset
 
         Returns:
             None
 
         """
-        first_dataset = datasets_to_keep[0]
-        dataset_names = [dataset['name'] for dataset in datasets_to_keep]
-        for dataset in Dataset.search_in_hdx(fq='organization:%s' % first_dataset['organization']['name']):
-            if dataset['maintainer'] != first_dataset['maintainer']:
+        for dataset in Dataset.search_in_hdx(fq='organization:%s' % orgname):
+            if dataset['maintainer'] != maintainerid:
                 continue
-            if dataset['name'] in dataset_names:
+            if dataset['name'] in datasets_to_keep:
                 continue
             if not any(x in dataset.get_resource()['url'] for x in self.geonode_urls):
                 continue
