@@ -8,8 +8,9 @@ Reads from GeoNode servers and creates datasets.
 
 """
 import logging
-from typing import List, Dict, Optional, Tuple, Union, Callable, Any
+from typing import List, Dict, Optional, Tuple, Union, Callable, Any, Type
 
+from hdx.data.organization import Organization
 from hdx.utilities.dateparse import parse_date, default_date
 from six.moves.urllib.parse import quote_plus
 
@@ -180,7 +181,6 @@ class GeoNodeToHDX(object):
 
         Returns:
             List[Dict]: List of layers
-
         """
         if countryiso is None:
             regionstr = ''
@@ -190,6 +190,27 @@ class GeoNodeToHDX(object):
         jsonresponse = response.json()
         return jsonresponse['objects']
 
+    @staticmethod
+    def get_orgname(metadata, orgclass=Organization):
+        # type: (Dict, Type) -> str
+        """
+        Get orgname from Dict if available or use orgid from Dict to look up organisation name
+
+        Args:
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
+            orgclass (Type): Class to use for look up. Defaults to Organization.
+
+        Returns:
+            str: Organisation name
+
+        """
+        orgname = metadata.get('orgname')
+        if not orgname:
+            organisation = orgclass.read_from_hdx(metadata['orgid'])
+            orgname = organisation['name']
+            metadata['orgname'] = orgname
+        return orgname
+
     def generate_dataset_and_showcase(self, countryiso, layer, metadata, get_date_from_title=False, process_dataset_name=lambda x: x):
         # type: (str, Dict, Dict, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[List],Optional[Showcase]]
         """
@@ -198,13 +219,12 @@ class GeoNodeToHDX(object):
         Args:
             countryiso (str): ISO 3 code of country
             layer (Dict): Data about layer from GeoNode
-            metadata (Dict): Dictionary containing keys: maintainerid, orgid, orgname, updatefreq, subnational
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
         Returns:
             Tuple[Optional[Dataset],List,Optional[Showcase]]: Dataset, date ranges in dataset title and Showcase objects or None, None, None
-
         """
         origtitle = layer['title'].strip()
         notes = layer['abstract']
@@ -233,7 +253,7 @@ class GeoNodeToHDX(object):
         else:
             dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, origtitle)
             logger.info('Using %s-%s instead of %s for dataset date' % (ranges[0][0], ranges[0][1], dataset_date))
-        slugified_name = slugify('%s_geonode_%s' % (metadata['orgname'], title))
+        slugified_name = slugify('%s_geonode_%s' % (self.get_orgname(metadata), title))
         slugified_name = process_dataset_name(slugified_name)
         slugified_name = slugified_name[:90]
         dataset['name'] = slugified_name
@@ -309,7 +329,7 @@ class GeoNodeToHDX(object):
         Generate datasets and showcases for all GeoNode layers
 
         Args:
-            metadata (Dict): Dictionary containing keys: maintainerid, orgid, orgname, updatefreq, subnational
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             create_dataset_showcase (Callable[[Dataset, Showcase, Any], None]): Function to call to create dataset and showcase
             countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
@@ -348,24 +368,23 @@ class GeoNodeToHDX(object):
                     dataset_dates[dataset_name] = max_date
         return list(dataset_dates.keys())
 
-    def delete_other_datasets(self, datasets_to_keep, maintainerid, orgname, delete_from_hdx=delete_from_hdx):
-        # type: (List[str], str, str, Callable[[Dataset], None]) -> None
+    def delete_other_datasets(self, datasets_to_keep, metadata, delete_from_hdx=delete_from_hdx):
+        # type: (List[str], Dict, Callable[[Dataset], None]) -> None
         """
         Delete all GeoNode datasets and associated showcases in HDX where layers have been deleted from
         the GeoNode server.
 
         Args:
             datasets_to_keep (List[str]): List of dataset names that are to be kept (they were added or updated)
-            maintainerid (str): Maintainer ID
-            orgname (str): Organisation name
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             delete_from_hdx (Callable[[Dataset], None]): Function to call to delete dataset
 
         Returns:
             None
 
         """
-        for dataset in Dataset.search_in_hdx(fq='organization:%s' % orgname):
-            if dataset['maintainer'] != maintainerid:
+        for dataset in Dataset.search_in_hdx(fq='organization:%s' % self.get_orgname(metadata)):
+            if dataset['maintainer'] != metadata['maintainerid']:
                 continue
             if dataset['name'] in datasets_to_keep:
                 continue

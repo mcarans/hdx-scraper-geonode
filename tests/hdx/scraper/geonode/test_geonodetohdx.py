@@ -231,7 +231,7 @@ class TestGeoNodeToHDX:
     def search_datasets(self, monkeypatch):
 
         def search_in_hdx(fq):
-            if 'wfp' in fq:
+            if self.wfpmetadata['orgid'] in fq:
                 return [self.construct_dataset(dataset, resources) for dataset, resources in
                         zip((self.wfpdatasets + self.mimudatasets), (self.wfpresources+self.mimuresources))]
             else:
@@ -391,14 +391,23 @@ class TestGeoNodeToHDX:
 
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
         geonodetohdx.geonode_urls.append('https://ogcserver.gis.wfp.org')
-        geonodetohdx.delete_other_datasets(self.wfpnames, 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'wfp', delete_from_hdx=delete_from_hdx)
+        geonodetohdx.delete_other_datasets(self.wfpnames, self.wfpmetadata, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
 
-        geonodetohdx.delete_other_datasets(self.mimunames, '196196be-6037-4488-8b71-d786adf4c081', 'mimu', delete_from_hdx=delete_from_hdx)
+        geonodetohdx.delete_other_datasets(self.mimunames, self.mimumetadata, delete_from_hdx=delete_from_hdx)
         assert datasets[0]['name'] == self.wfpdatasets[0]['name']
         assert datasets[1]['name'] == self.wfpdatasets[1]['name']
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
         datasets = list()
-        geonodetohdx.delete_other_datasets(self.mimunames, '196196be-6037-4488-8b71-d786adf4c081', 'mimu', delete_from_hdx=delete_from_hdx)
+        geonodetohdx.delete_other_datasets(self.mimunames, self.mimumetadata, delete_from_hdx=delete_from_hdx)
         assert len(datasets) == 0
 
+    def test_get_orgname(self):
+        metadata = {'orgid': '12345'}
+
+        class MyOrg:
+            @staticmethod
+            def read_from_hdx(id):
+                return {'name': 'abc'}
+
+        assert GeoNodeToHDX.get_orgname(metadata, orgclass=MyOrg) == 'abc'
