@@ -67,6 +67,8 @@ class TestGeoNodeToHDX:
                       'thumbnail_url': 'https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png',
                       'title': 'ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014', 'uuid': 'e4cc9008-ee69-11e8-a005-005056822e38'}]
 
+    wfpmetadata = {'maintainerid': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'orgid': '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'orgname': 'WFP'}
+    
     wfpdatasets = [{'name': 'wfp-geonode-ica-sudan-land-degradation', 'title': 'ICA Sudan - Land Degradation',
                     'notes': 'This layer contains...\n\nOriginal dataset title: ICA Sudan, 2018 - Land Degradation, 2001-2013', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7',
                     'dataset_date': '01/01/2001-12/31/2013', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
@@ -107,6 +109,9 @@ class TestGeoNodeToHDX:
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     wfpnames = [dataset['name'] for dataset in wfpdatasets]
+
+    mimumetadata = {'maintainerid': '196196be-6037-4488-8b71-d786adf4c081',
+                    'orgid': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'orgname': 'MIMU'}
 
     mimudatasets = [{'name': 'mimu-geonode-myanmar-town', 'title': 'Myanmar Town',
                      'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
@@ -150,6 +155,14 @@ class TestGeoNodeToHDX:
                       'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     mimunames = [dataset['name'] for dataset in mimudatasets]
+
+    mimudataset_withdate = {'title': 'Myanmar Town 2019 July', 'dataset_date': '08/05/2019', 'name': 'mimu-geonode-myanmar-town-2019-july', 'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
+    mimudatasets_withdates = [mimudataset_withdate, {'title': 'Myanmar 2002-2014 Forest Cover Change', 'dataset_date': '02/12/2019', 'name': 'mimu-geonode-myanmar-2002-2014-forest-cover-change', 'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}, mimudataset_withdate]
+
+    mimushowcase_withdate = {'name': 'mimu-geonode-myanmar-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July', 'notes': 'Towns are urban areas divided into wards.', 'url': 'http://aaa/layers/geonode%3Ammr_town_2019_july', 'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png', 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
+    mimushowcases_withdates = [mimushowcase_withdate, {'name': 'mimu-geonode-myanmar-2002-2014-forest-cover-change-showcase', 'title': 'Myanmar 2002-2014 Forest Cover Change', 'notes': 'A Landsat-based classification of Myanmar’s forest cover', 'url': 'http://aaa/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp', 'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-5801f3fa-2ee9-11e9-8d0e-42010a80000c-thumb.png', 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}, mimushowcase_withdate]
+
+    mimunames_withdates = ['mimu-geonode-myanmar-town-2019-july', 'mimu-geonode-myanmar-2002-2014-forest-cover-change']
 
     @staticmethod
     def construct_dataset(origdata, origresources, maintainer=None, orgid=None, organization=None):
@@ -202,6 +215,10 @@ class TestGeoNodeToHDX:
                     def fn():
                         return {'objects': TestGeoNodeToHDX.mimulayersdata + [TestGeoNodeToHDX.oldmimulayer]}
                     response.json = fn
+                elif url == 'http://aaa/api/layers':
+                    def fn():
+                        return {'objects': TestGeoNodeToHDX.mimulayersdata + [TestGeoNodeToHDX.mimulayersdata[0]]}
+                    response.json = fn
                 return response
 
         return Download()
@@ -240,14 +257,14 @@ class TestGeoNodeToHDX:
 
     def test_generate_dataset_and_showcase(self, configuration, downloader):
         geonodetohdx = GeoNodeToHDX('http://xxx', downloader)
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[0], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[0], self.wfpmetadata, get_date_from_title=True)
         assert dataset == self.wfpdatasets[0]
         resources = dataset.get_resources()
         assert resources == self.wfpresources[0]
         assert ranges == [(datetime(2001, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)), (datetime(2018, 1, 1, 0, 0), datetime(2018, 12, 31, 0, 0))]
         assert showcase == self.wfpshowcases[0]
 
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[1], 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('SDN', TestGeoNodeToHDX.wfplayersdata[1], self.wfpmetadata, get_date_from_title=True)
         assert dataset == self.wfpdatasets[1]
         resources = dataset.get_resources()
         assert resources == self.wfpresources[1]
@@ -256,14 +273,14 @@ class TestGeoNodeToHDX:
         assert geonodetohdx.geonode_urls[1] == 'https://ogcserver.gis.wfp.org'
 
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], self.mimumetadata, get_date_from_title=True)
         assert dataset == self.mimudatasets[0]
         resources = dataset.get_resources()
         assert resources == self.mimuresources[0]
         assert ranges == [(datetime(2019, 7, 1, 0, 0), datetime(2019, 7, 31, 0, 0))]
         assert showcase == self.mimushowcases[0]
 
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[1], '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[1], self.mimumetadata, get_date_from_title=True)
         assert dataset == self.mimudatasets[1]
         resources = dataset.get_resources()
         assert resources == self.mimuresources[1]
@@ -275,27 +292,27 @@ class TestGeoNodeToHDX:
         layersdata = copy.deepcopy(TestGeoNodeToHDX.mimulayersdata[0])
         abstract = layersdata['abstract']
         layersdata['abstract'] = '%s deprecated' % abstract
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset is None
         assert showcase is None
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader, yaml_config)
         layersdata['abstract'] = '%s deprecated' % abstract
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset is not None
         assert showcase is not None
         layersdata['abstract'] = '%s abcd' % abstract
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset is None
         assert showcase is None
         layersdata['abstract'] = '%s hdx' % abstract
         geonodetohdx.get_ignore_data().append('hdx')
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset is None
         assert showcase is None
         geonodetohdx.get_category_mapping()['Location'] = 'acronyms'
         geonodetohdx.get_titleabstract_mapping()['ffa'] = ['cash assistance']
         layersdata['abstract'] = '%s landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion' % abstract
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset == {'name': 'mimu-geonode-myanmar-town',
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
@@ -313,7 +330,7 @@ class TestGeoNodeToHDX:
                                     {'name': 'internally displaced persons - idp', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'malnutrition', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'cash assistance', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
         layersdata['abstract'] = '%s security nutrition' % abstract
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, '196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU', get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', layersdata, self.mimumetadata, get_date_from_title=True)
         assert dataset == {'name': 'mimu-geonode-myanmar-town',
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
@@ -331,8 +348,7 @@ class TestGeoNodeToHDX:
             datasets.append(dataset)
             showcases.append(showcase)
 
-        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases('d7a13725-5cb5-48f4-87ac-a70b5cea531e', '3ecac442-7fed-448d-8f78-b385ef6f84e7', 'WFP',
-                                                                        create_dataset_showcase=create_dataset_showcase, get_date_from_title=True)
+        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.wfpmetadata, create_dataset_showcase=create_dataset_showcase, get_date_from_title=True)
         assert datasets == self.wfpdatasets
         assert showcases == self.wfpshowcases
         assert datasets_to_keep == self.wfpnames
@@ -340,8 +356,8 @@ class TestGeoNodeToHDX:
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
         datasets = list()
         showcases = list()
-        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases('196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU',
-                                                                        create_dataset_showcase=create_dataset_showcase, countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
+        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.mimumetadata, create_dataset_showcase=create_dataset_showcase,
+                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
         assert datasets == self.mimudatasets
         assert showcases == self.mimushowcases
         assert datasets_to_keep == self.mimunames
@@ -349,14 +365,23 @@ class TestGeoNodeToHDX:
         geonodetohdx = GeoNodeToHDX('http://zzz', downloader)
         datasets = list()
         showcases = list()
-        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases('196196be-6037-4488-8b71-d786adf4c081', 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'MIMU',
-                                                                        create_dataset_showcase=create_dataset_showcase, countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
+        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.mimumetadata, create_dataset_showcase=create_dataset_showcase,
+                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
         assert datasets == self.mimudatasets
         mimushowcases = copy.deepcopy(self.mimushowcases)
         mimushowcases[0]['url'] = mimushowcases[0]['url'].replace('yyy', 'zzz')
         mimushowcases[1]['url'] = mimushowcases[1]['url'].replace('yyy', 'zzz')
         assert showcases == mimushowcases
         assert datasets_to_keep == self.mimunames
+
+        geonodetohdx = GeoNodeToHDX('http://aaa', downloader)
+        datasets = list()
+        showcases = list()
+        datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.mimumetadata, create_dataset_showcase=create_dataset_showcase,
+                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=False)
+        assert datasets == self.mimudatasets_withdates
+        assert showcases == self.mimushowcases_withdates
+        assert datasets_to_keep == self.mimunames_withdates
 
     def test_delete_other_datasets(self, search_datasets, configuration, downloader):
         datasets = list()

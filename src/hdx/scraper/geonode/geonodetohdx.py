@@ -8,9 +8,7 @@ Reads from GeoNode servers and creates datasets.
 
 """
 import logging
-from collections import OrderedDict
-from datetime import datetime
-from typing import List, Dict, Optional, Tuple, Union, Callable
+from typing import List, Dict, Optional, Tuple, Union, Callable, Any
 
 from hdx.utilities.dateparse import parse_date, default_date
 from six.moves.urllib.parse import quote_plus
@@ -27,14 +25,38 @@ from slugify import slugify
 logger = logging.getLogger(__name__)
 
 
-def create_dataset_showcase(dataset, showcase):
+def create_dataset_showcase(dataset, showcase, **kwargs):
+    # type: (Dataset, Showcase, Any) -> None
+    """
+    Create dataset and showcase
+
+    Args:
+        dataset (Dataset): Dataset to create
+        showcase (Showcase): Showcase to create
+        **kwargs: Args to pass to dataset create_in_hdx call
+
+    Returns:
+        None
+
+    """
     dataset.update_from_yaml()
-    dataset.create_in_hdx(remove_additional_resources=True, hxl_update=False)
+    dataset.create_in_hdx(remove_additional_resources=True, hxl_update=False, **kwargs)
     showcase.create_in_hdx()
     showcase.add_dataset(dataset)
 
 
 def delete_from_hdx(dataset):
+    # type: (Dataset) -> None
+    """
+    Delete dataset and any associated showcases
+
+    Args:
+        dataset (Dataset): Dataset to delete
+
+    Returns:
+        None
+
+    """
     logger.info('Deleting %s and any associated showcases' % dataset['title'])
     for showcase in dataset.get_showcases():
         showcase.delete_from_hdx()
@@ -168,20 +190,15 @@ class GeoNodeToHDX(object):
         jsonresponse = response.json()
         return jsonresponse['objects']
 
-    def generate_dataset_and_showcase(self, countryiso, layer, maintainerid, orgid, orgname, updatefreq='Adhoc',
-                                      subnational=True, get_date_from_title=False, process_dataset_name=lambda x: x):
-        # type: (str, Dict, str, str, str, str, bool, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[List],Optional[Showcase]]
+    def generate_dataset_and_showcase(self, countryiso, layer, metadata, get_date_from_title=False, process_dataset_name=lambda x: x):
+        # type: (str, Dict, Dict, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[List],Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
 
         Args:
             countryiso (str): ISO 3 code of country
             layer (Dict): Data about layer from GeoNode
-            maintainerid (str): Maintainer ID
-            orgid (str): Organisation ID
-            orgname (str): Organisation name
-            updatefreq (str): Update frequency. Defaults to Adhoc.
-            subnational (bool): Subnational. Default to True.
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, orgname, updatefreq, subnational
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
 
@@ -198,7 +215,10 @@ class GeoNodeToHDX(object):
                 return None, None, None
 
         dataset = Dataset({'title': origtitle})
-        ranges = dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
+        if get_date_from_title:
+            ranges = dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
+        else:
+            ranges = list()
         title = dataset['title']
         logger.info('Creating dataset: %s' % title)
         detail_url = layer['detail_url']
@@ -207,18 +227,22 @@ class GeoNodeToHDX(object):
             dataset_notes = notes
         else:
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
+        dataset_date = parse_date(layer['date'])
         if origtitle == title:
-            dataset.set_dataset_date_from_datetime(parse_date(layer['date']))
+            dataset.set_dataset_date_from_datetime(dataset_date)
         else:
             dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, origtitle)
-        slugified_name = slugify('%s_geonode_%s' % (orgname, title))
+            logger.info('Using %s-%s instead of %s for dataset date' % (ranges[0][0], ranges[0][1], dataset_date))
+        slugified_name = slugify('%s_geonode_%s' % (metadata['orgname'], title))
         slugified_name = process_dataset_name(slugified_name)
         slugified_name = slugified_name[:90]
         dataset['name'] = slugified_name
         dataset['notes'] = dataset_notes
-        dataset.set_maintainer(maintainerid)
-        dataset.set_organization(orgid)
+        dataset.set_maintainer(metadata['maintainerid'])
+        dataset.set_organization(metadata['orgid'])
+        updatefreq = metadata.get('updatefreq', 'As needed')
         dataset.set_expected_update_frequency(updatefreq)
+        subnational = metadata.get('subnational', True)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
         tags = ['geodata']
@@ -277,23 +301,20 @@ class GeoNodeToHDX(object):
         showcase.add_tags(tags)
         return dataset, ranges, showcase
 
-    def generate_datasets_and_showcases(self, maintainerid, orgid, orgname, updatefreq='Adhoc', subnational=True,
-                                        create_dataset_showcase=create_dataset_showcase, countrydata=None,
-                                        get_date_from_title=False, process_dataset_name=lambda x: x):
-        # type: (str, str, str, str, bool, Callable[[Dataset, Showcase], None], Dict[str,Optional[str]], bool, Callable[[str], str]) -> List[str]
+    def generate_datasets_and_showcases(self, metadata, create_dataset_showcase=create_dataset_showcase,
+                                        countrydata=None, get_date_from_title=False, process_dataset_name=lambda x: x,
+                                        **kwargs):
+        # type: (Dict, Callable[[Dataset, Showcase, Any], None], Dict[str,Optional[str]], bool, Callable[[str], str], Any) -> List[str]
         """
         Generate datasets and showcases for all GeoNode layers
 
         Args:
-            maintainerid (str): Maintainer ID
-            orgid (str): Organisation ID
-            orgname (str): Organisation name
-            updatefreq (str): Update frequency. Defaults to Adhoc.
-            subnational (bool): Subnational. Default to True.
-            create_dataset_showcase (Callable[[Dataset, Showcase], None]): Function to call to create dataset and showcase
+            metadata (Dict): Dictionary containing keys: maintainerid, orgid, orgname, updatefreq, subnational
+            create_dataset_showcase (Callable[[Dataset, Showcase, Any], None]): Function to call to create dataset and showcase
             countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
+            **kwargs: Args to pass to dataset create_in_hdx call
 
         Returns:
             List[str]: List of names of datasets added or updated
@@ -309,8 +330,7 @@ class GeoNodeToHDX(object):
             layers = self.get_layers(countrydata['layers'])
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
-                dataset, ranges, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, maintainerid,
-                                                                               orgid, orgname, updatefreq, subnational,
+                dataset, ranges, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, metadata,
                                                                                get_date_from_title, process_dataset_name)
                 if dataset:
                     dataset_name = dataset['name']
@@ -324,7 +344,7 @@ class GeoNodeToHDX(object):
                                        ' %s (dates removed) with max date %s has been created already!' %
                                        (layer['title'], max_date, dataset_name, prev_max))
                         continue
-                    create_dataset_showcase(dataset, showcase)
+                    create_dataset_showcase(dataset, showcase, **kwargs)
                     dataset_dates[dataset_name] = max_date
         return list(dataset_dates.keys())
 
