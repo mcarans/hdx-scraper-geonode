@@ -320,6 +320,9 @@ class GeoNodeToHDX(object):
                             max_date = range[1]
                     prev_max = dataset_dates.get(dataset_name)
                     if prev_max and prev_max > max_date:
+                        logger.warning('Ignoring %s with max date %s!'
+                                       ' %s (dates removed) with max date %s has been created already!' %
+                                       (layer['title'], max_date, dataset_name, prev_max))
                         continue
                     create_dataset_showcase(dataset, showcase)
                     dataset_dates[dataset_name] = max_date
