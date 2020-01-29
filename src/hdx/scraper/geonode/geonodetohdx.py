@@ -23,6 +23,8 @@ from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import script_dir_plus_file
 from slugify import slugify
 
+from hdx.scraper.geonode.version import get_geonode_version
+
 logger = logging.getLogger(__name__)
 
 
@@ -340,6 +342,8 @@ class GeoNodeToHDX(object):
             List[str]: List of names of datasets added or updated
 
         """
+        logger.info('--------------------------------------------------')
+        logger.info('> Using HDX Python GeoNode Library %s' % get_geonode_version())
         if countrydata:
             countries = [countrydata]
         else:

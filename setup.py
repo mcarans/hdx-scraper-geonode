@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 from hdx.utilities.loader import load_file_to_str
 
 requirements = ['python-slugify',
-                'hdx-python-api>=4.0.6']
+                'hdx-python-api>=4.0.7']
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
