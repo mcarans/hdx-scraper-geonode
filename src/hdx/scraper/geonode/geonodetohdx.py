@@ -8,6 +8,8 @@ Reads from GeoNode servers and creates datasets.
 
 """
 import logging
+from collections import OrderedDict
+
 from typing import List, Dict, Optional, Tuple, Union, Callable, Any, Type
 
 from hdx.data.organization import Organization
@@ -349,7 +351,7 @@ class GeoNodeToHDX(object):
         else:
             countries = self.get_countries()
             logger.info('Number of countries: %d' % len(countries))
-        dataset_dates = dict()
+        dataset_dates = OrderedDict()
         for countrydata in countries:
             layers = self.get_layers(countrydata['layers'])
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
