@@ -13,6 +13,7 @@ from collections import OrderedDict
 from typing import List, Dict, Optional, Tuple, Union, Callable, Any, Type
 
 from hdx.data.organization import Organization
+from hdx.utilities import get_uuid
 from hdx.utilities.dateparse import parse_date, default_date
 from six.moves.urllib.parse import quote_plus
 
@@ -352,6 +353,8 @@ class GeoNodeToHDX(object):
             countries = self.get_countries()
             logger.info('Number of countries: %d' % len(countries))
         dataset_dates = OrderedDict()
+        if 'batch' not in kwargs:
+            kwargs['batch'] = get_uuid()
         for countrydata in countries:
             layers = self.get_layers(countrydata['layers'])
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))

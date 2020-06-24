@@ -344,7 +344,7 @@ class TestGeoNodeToHDX:
         datasets = list()
         showcases = list()
 
-        def create_dataset_showcase(dataset, showcase):
+        def create_dataset_showcase(dataset, showcase, batch):
             datasets.append(dataset)
             showcases.append(showcase)
 
