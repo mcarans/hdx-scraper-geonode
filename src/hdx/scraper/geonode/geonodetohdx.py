@@ -216,8 +216,8 @@ class GeoNodeToHDX(object):
             metadata['orgname'] = orgname
         return orgname
 
-    def generate_dataset_and_showcase(self, countryiso, layer, metadata, get_date_from_title=False, process_dataset_name=lambda x: x):
-        # type: (str, Dict, Dict, bool, Callable[[str], str]) -> Tuple[Optional[Dataset],Optional[List],Optional[Showcase]]
+    def generate_dataset_and_showcase(self, countryiso, layer, metadata, get_date_from_title=False, process_dataset_name=lambda x: x, dataset_tags_mapping=dict()):
+        # type: (str, Dict, Dict, bool, Callable[[str], str], Dict[str, List]) -> Tuple[Optional[Dataset], Optional[List], Optional[Showcase]]
         """
         Generate dataset and showcase for GeoNode layer
 
@@ -227,6 +227,7 @@ class GeoNodeToHDX(object):
             metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
+            dataset_tags_mapping (Dict[str, List]): Mapping from dataset name to additional tags. Defaults to empty dictionary.
 
         Returns:
             Tuple[Optional[Dataset],List,Optional[Showcase]]: Dataset, date ranges in dataset title and Showcase objects or None, None, None
@@ -270,7 +271,8 @@ class GeoNodeToHDX(object):
         subnational = metadata.get('subnational', True)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
-        tags = ['geodata']
+        tags = dataset_tags_mapping.get(slugified_name, list())
+        tags.append('geodata')
         tag = layer['category__gn_description']
         if tag is not None:
             if tag in self.category_mapping:
@@ -328,17 +330,18 @@ class GeoNodeToHDX(object):
 
     def generate_datasets_and_showcases(self, metadata, create_dataset_showcase=create_dataset_showcase,
                                         countrydata=None, get_date_from_title=False, process_dataset_name=lambda x: x,
-                                        **kwargs):
-        # type: (Dict, Callable[[Dataset, Showcase, Any], None], Dict[str,Optional[str]], bool, Callable[[str], str], Any) -> List[str]
+                                        dataset_tags_mapping=dict(), **kwargs):
+        # type: (Dict, Callable[[Dataset, Showcase, Any], None], Dict[str, Optional[str]], bool, Callable[[str], str], Dict[str, List], Any) -> List[str]
         """
         Generate datasets and showcases for all GeoNode layers
 
         Args:
             metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             create_dataset_showcase (Callable[[Dataset, Showcase, Any], None]): Function to call to create dataset and showcase
-            countrydata (Dict[str,Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
+            countrydata (Dict[str, Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
+            dataset_tags_mapping (Dict[str, List]): Mapping from dataset name to additional tags. Defaults to empty dictionary.
             **kwargs: Args to pass to dataset create_in_hdx call
 
         Returns:
@@ -360,7 +363,8 @@ class GeoNodeToHDX(object):
             logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
             for layer in layers:
                 dataset, ranges, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, metadata,
-                                                                               get_date_from_title, process_dataset_name)
+                                                                               get_date_from_title, process_dataset_name,
+                                                                               dataset_tags_mapping=dataset_tags_mapping)
                 if dataset:
                     dataset_name = dataset['name']
                     max_date = default_date

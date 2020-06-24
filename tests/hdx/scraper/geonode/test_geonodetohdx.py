@@ -15,6 +15,7 @@ from hdx.scraper.geonode.geonodetohdx import GeoNodeToHDX
 
 
 class TestGeoNodeToHDX:
+    dataset_tags_mapping = {'mimu-geonode-myanmar-town': ['common operational dataset - cod']}
     wfplocationsdata = [{'code': 'SAF', 'count': 2, 'id': 14, 'level': 2, 'lft': 65, 'name': 'Southern Africa',
                          'name_en': 'Southern Africa', 'resource_uri': '/api/regions/14/', 'rght': 82, 'tree_id': 90},
                         {'code': 'SDN', 'count': 33, 'id': 218, 'level': 3, 'lft': 58, 'name': 'Sudan',
@@ -117,7 +118,7 @@ class TestGeoNodeToHDX:
                      'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
                      'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
                      'dataset_date': '07/01/2019-07/31/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
-                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
+                     'tags': [{'name': 'common operational dataset - cod', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
                     {'name': 'mimu-geonode-myanmar-forest-cover-change', 'title': 'Myanmar Forest Cover Change',
                      'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES\n\nOriginal dataset title: Myanmar 2002-2014 Forest Cover Change',
                      'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
@@ -148,7 +149,7 @@ class TestGeoNodeToHDX:
     mimushowcases = [{'name': 'mimu-geonode-myanmar-town-showcase', 'title': 'Myanmar Town',
                       'notes': 'Towns are urban areas divided into wards.', 'url': 'http://yyy/layers/geonode%3Ammr_town_2019_july',
                       'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png',
-                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
+                      'tags': [{'name': 'common operational dataset - cod', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
                      {'name': 'mimu-geonode-myanmar-forest-cover-change-showcase', 'title': 'Myanmar Forest Cover Change',
                       'notes': 'A Landsat-based classification of Myanmar’s forest cover', 'url': 'http://yyy/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp',
                       'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-5801f3fa-2ee9-11e9-8d0e-42010a80000c-thumb.png',
@@ -184,7 +185,7 @@ class TestGeoNodeToHDX:
         Country.countriesdata(False)
         Vocabulary._tags_dict = True
         Vocabulary._approved_vocabulary = {
-            'tags': [{'name': 'geodata'}, {'name': 'populated places - settlements'}, {'name': 'land use and land cover'}, {'name': 'erosion'}, {'name': 'landslides - mudslides'}, {'name': 'floods - storm surges'}, {'name': 'droughts'}, {'name': 'food assistance'}, {'name': 'hazards and risk'}, {'name': 'administrative divisions'}, {'name': 'food security'}, {'name': 'security'}, {'name': 'displaced persons locations - camps - shelters'}, {'name': 'refugees'}, {'name': 'internally displaced persons - idp'}, {'name': 'malnutrition'}, {'name': 'nutrition'}, {'name': 'food assistance'}, {'name': 'roads'}, {'name': 'transportation'}, {'name': 'aviation'}, {'name': 'facilities and infrastructure'}, {'name': 'bridges'}, {'name': 'transportation'}, {'name': 'facilities and infrastructure'}, {'name': 'cold waves'}, {'name': 'cash assistance'}, {'name': 'acronyms'}],
+            'tags': [{'name': 'geodata'}, {'name': 'populated places - settlements'}, {'name': 'land use and land cover'}, {'name': 'erosion'}, {'name': 'landslides - mudslides'}, {'name': 'floods - storm surges'}, {'name': 'droughts'}, {'name': 'food assistance'}, {'name': 'hazards and risk'}, {'name': 'administrative divisions'}, {'name': 'food security'}, {'name': 'security'}, {'name': 'displaced persons locations - camps - shelters'}, {'name': 'refugees'}, {'name': 'internally displaced persons - idp'}, {'name': 'malnutrition'}, {'name': 'nutrition'}, {'name': 'food assistance'}, {'name': 'roads'}, {'name': 'transportation'}, {'name': 'aviation'}, {'name': 'facilities and infrastructure'}, {'name': 'bridges'}, {'name': 'transportation'}, {'name': 'facilities and infrastructure'}, {'name': 'cold waves'}, {'name': 'cash assistance'}, {'name': 'acronyms'}, {'name': 'common operational dataset - cod'}],
             'id': '4e61d464-4943-4e97-973a-84673c1aaa87', 'name': 'approved'}
 
     @pytest.fixture(scope='function')
@@ -273,7 +274,7 @@ class TestGeoNodeToHDX:
         assert geonodetohdx.geonode_urls[1] == 'https://ogcserver.gis.wfp.org'
 
         geonodetohdx = GeoNodeToHDX('http://yyy', downloader)
-        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], self.mimumetadata, get_date_from_title=True)
+        dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase('MMR', TestGeoNodeToHDX.mimulayersdata[0], self.mimumetadata, get_date_from_title=True, dataset_tags_mapping=self.dataset_tags_mapping)
         assert dataset == self.mimudatasets[0]
         resources = dataset.get_resources()
         assert resources == self.mimuresources[0]
@@ -357,7 +358,8 @@ class TestGeoNodeToHDX:
         datasets = list()
         showcases = list()
         datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.mimumetadata, create_dataset_showcase=create_dataset_showcase,
-                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
+                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True,
+                                                                        dataset_tags_mapping=self.dataset_tags_mapping)
         assert datasets == self.mimudatasets
         assert showcases == self.mimushowcases
         assert datasets_to_keep == self.mimunames
@@ -366,7 +368,8 @@ class TestGeoNodeToHDX:
         datasets = list()
         showcases = list()
         datasets_to_keep = geonodetohdx.generate_datasets_and_showcases(self.mimumetadata, create_dataset_showcase=create_dataset_showcase,
-                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True)
+                                                                        countrydata={'iso3': 'MMR', 'name': 'Myanmar', 'layers': None}, get_date_from_title=True,
+                                                                        dataset_tags_mapping=self.dataset_tags_mapping)
         assert datasets == self.mimudatasets
         mimushowcases = copy.deepcopy(self.mimushowcases)
         mimushowcases[0]['url'] = mimushowcases[0]['url'].replace('yyy', 'zzz')
