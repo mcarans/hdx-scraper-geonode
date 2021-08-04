@@ -72,16 +72,16 @@ class TestGeoNodeToHDX:
     
     wfpdatasets = [{'name': 'wfp-geonode-ica-sudan-land-degradation', 'title': 'ICA Sudan - Land Degradation',
                     'notes': 'This layer contains...\n\nOriginal dataset title: ICA Sudan, 2018 - Land Degradation, 2001-2013', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7',
-                    'dataset_date': '01/01/2001-12/31/2013', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
+                    'dataset_date': '[2001-01-01T00:00:00 TO 2013-12-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
                    {'name': 'wfp-geonode-ica-sudan-most-predominant-livelihood-zones', 'title': 'ICA Sudan - Most Predominant Livelihood Zones',
                     'notes': 'This layer contains...\n\nOriginal dataset title: ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014', 'maintainer': 'd7a13725-5cb5-48f4-87ac-a70b5cea531e', 'owner_org': '3ecac442-7fed-448d-8f78-b385ef6f84e7',
-                    'dataset_date': '01/01/2014-12/31/2014', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
+                    'dataset_date': '[2014-01-01T00:00:00 TO 2014-12-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'sdn'}],
                     'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     wfpresources = [[{'name': 'ICA Sudan - Land Degradation shapefile',
                       'url': 'http://xxx/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
-                      'description': 'Zipped Shapefile. This layer contains...', 'format': 'zipped shapefile',
+                      'description': 'Zipped Shapefile. This layer contains...', 'format': 'shp',
                       'resource_type': 'api', 'url_type': 'api'},
                      {'name': 'ICA Sudan - Land Degradation geojson',
                       'url': 'http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
@@ -89,7 +89,7 @@ class TestGeoNodeToHDX:
                       'resource_type': 'api', 'url_type': 'api'}],
                     [{'name': 'ICA Sudan - Most Predominant Livelihood Zones shapefile',
                       'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
-                      'description': 'Zipped Shapefile. This layer contains...', 'format': 'zipped shapefile',
+                      'description': 'Zipped Shapefile. This layer contains...', 'format': 'shp',
                       'resource_type': 'api', 'url_type': 'api'},
                      {'name': 'ICA Sudan - Most Predominant Livelihood Zones geojson',
                       'url': 'https://ogcserver.gis.wfp.org/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
@@ -117,18 +117,18 @@ class TestGeoNodeToHDX:
     mimudatasets = [{'name': 'mimu-geonode-myanmar-town', 'title': 'Myanmar Town',
                      'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
                      'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
-                     'dataset_date': '07/01/2019-07/31/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
+                     'dataset_date': '[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                      'tags': [{'name': 'common operational dataset - cod', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]},
                     {'name': 'mimu-geonode-myanmar-forest-cover-change', 'title': 'Myanmar Forest Cover Change',
                      'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES\n\nOriginal dataset title: Myanmar 2002-2014 Forest Cover Change',
                      'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
-                     'dataset_date': '01/01/2002-12/31/2014', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
+                     'dataset_date': '[2002-01-01T00:00:00 TO 2014-12-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                      'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}]
 
     mimuresources = [[{'name': 'Myanmar Town shapefile',
                        'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:mmr_town_2019_july&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'Zipped Shapefile. Towns are urban areas divided into wards.',
-                       'format': 'zipped shapefile', 'resource_type': 'api', 'url_type': 'api'},
+                       'format': 'shp', 'resource_type': 'api', 'url_type': 'api'},
                       {'name': 'Myanmar Town geojson',
                        'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:mmr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'GeoJSON file. Towns are urban areas divided into wards.',
@@ -136,7 +136,7 @@ class TestGeoNodeToHDX:
                      [{'name': 'Myanmar Forest Cover Change shapefile',
                        'url': 'http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'Zipped Shapefile. A Landsat-based classification of Myanmar’s forest cover',
-                       'format': 'zipped shapefile', 'resource_type': 'api', 'url_type': 'api'},
+                       'format': 'shp', 'resource_type': 'api', 'url_type': 'api'},
                       {'name': 'Myanmar Forest Cover Change geojson',
                        'url': 'http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature',
                        'description': 'GeoJSON file. A Landsat-based classification of Myanmar’s forest cover',
@@ -157,8 +157,8 @@ class TestGeoNodeToHDX:
 
     mimunames = [dataset['name'] for dataset in mimudatasets]
 
-    mimudataset_withdate = {'title': 'Myanmar Town 2019 July', 'dataset_date': '08/05/2019', 'name': 'mimu-geonode-myanmar-town-2019-july', 'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
-    mimudatasets_withdates = [mimudataset_withdate, {'title': 'Myanmar 2002-2014 Forest Cover Change', 'dataset_date': '02/12/2019', 'name': 'mimu-geonode-myanmar-2002-2014-forest-cover-change', 'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}, mimudataset_withdate]
+    mimudataset_withdate = {'title': 'Myanmar Town 2019 July', 'dataset_date': '[2019-08-05T22:06:00 TO 2019-08-05T22:06:00]', 'name': 'mimu-geonode-myanmar-town-2019-july', 'notes': 'Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
+    mimudatasets_withdates = [mimudataset_withdate, {'title': 'Myanmar 2002-2014 Forest Cover Change', 'dataset_date': '[2019-02-12T11:12:00 TO 2019-02-12T11:12:00]', 'name': 'mimu-geonode-myanmar-2002-2014-forest-cover-change', 'notes': 'A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES', 'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}], 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}, mimudataset_withdate]
 
     mimushowcase_withdate = {'name': 'mimu-geonode-myanmar-town-2019-july-showcase', 'title': 'Myanmar Town 2019 July', 'notes': 'Towns are urban areas divided into wards.', 'url': 'http://aaa/layers/geonode%3Ammr_town_2019_july', 'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png', 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'populated places - settlements', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
     mimushowcases_withdates = [mimushowcase_withdate, {'name': 'mimu-geonode-myanmar-2002-2014-forest-cover-change-showcase', 'title': 'Myanmar 2002-2014 Forest Cover Change', 'notes': 'A Landsat-based classification of Myanmar’s forest cover', 'url': 'http://aaa/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp', 'image_url': 'http://geonode.themimu.info/uploaded/thumbs/layer-5801f3fa-2ee9-11e9-8d0e-42010a80000c-thumb.png', 'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'land use and land cover', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}, mimushowcase_withdate]
@@ -318,7 +318,7 @@ class TestGeoNodeToHDX:
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
-                           'dataset_date': '07/01/2019-07/31/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
+                           'dataset_date': '[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                            'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'acronyms', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'landslides - mudslides', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'floods - storm surges', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'droughts', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'hazards and risk', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
@@ -336,7 +336,7 @@ class TestGeoNodeToHDX:
                            'title': 'Myanmar Town',
                            'notes': 'Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July',
                            'maintainer': '196196be-6037-4488-8b71-d786adf4c081', 'owner_org': 'bde18602-2e92-462a-8e88-a0018a7b13f9',
-                           'dataset_date': '07/01/2019-07/31/2019', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
+                           'dataset_date': '[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]', 'data_update_frequency': '-2', 'subnational': '1', 'groups': [{'name': 'mmr'}],
                            'tags': [{'name': 'geodata', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'acronyms', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'},
                                     {'name': 'security', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}, {'name': 'nutrition', 'vocabulary_id': '4e61d464-4943-4e97-973a-84673c1aaa87'}]}
 

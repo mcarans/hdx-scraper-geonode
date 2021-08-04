@@ -255,7 +255,7 @@ class GeoNodeToHDX(object):
             dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
         dataset_date = parse_date(layer['date'])
         if origtitle == title:
-            dataset.set_dataset_date_from_datetime(dataset_date)
+            dataset.set_date_of_dataset(dataset_date)
         else:
             dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, origtitle)
             logger.info('Using %s-%s instead of %s for dataset date' % (ranges[0][0], ranges[0][1], dataset_date))
