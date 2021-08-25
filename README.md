@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/OCHA-DAP/hdx-scraper-geonode/workflows/build/badge.svg)](https://github.com/OCHA-DAP/hdx-scraper-geonode/actions?query=workflow%3Abuild) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-geonode/badge.svg?branch=master&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-geonode?branch=master)
+[![Build Status](https://github.com/OCHA-DAP/hdx-scraper-geonode/workflows/build/badge.svg)](https://github.com/OCHA-DAP/hdx-scraper-geonode/actions?query=workflow%3Abuild) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-geonode/badge.svg?branch=main&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-geonode?branch=main)
 
 The HDX Scraper Geonode Library enables easy building of scrapers for extracting data 
 from geonode servers. 
