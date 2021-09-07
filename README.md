@@ -9,6 +9,10 @@ The library has detailed API documentation which can be found
 here: <http://ocha-dap.github.io/hdx-scraper-geonode/>. The code for the
 library is here: <https://github.com/ocha-dap/hdx-scraper-geonode>.
 
+## Breaking Changes
+
+1.4.0 supports only Python 3.6 and later
+
 ## GeoNodeToHDX Class
 
 You should create an object of the GeoNodeToHDX class:
