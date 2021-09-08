@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 """
 GeoNode Utilities:
 -----------------
@@ -9,18 +8,16 @@ Reads from GeoNode servers and creates datasets.
 """
 import logging
 from collections import OrderedDict
-
-from typing import List, Dict, Optional, Tuple, Union, Callable, Any, Type
-
-from hdx.data.organization import Organization
-from hdx.utilities import get_uuid
-from hdx.utilities.dateparse import parse_date, default_date
-from six.moves.urllib.parse import quote_plus
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+from urllib.parse import quote_plus
 
 from hdx.data.dataset import Dataset
+from hdx.data.organization import Organization
 from hdx.data.resource import Resource
 from hdx.data.showcase import Showcase
 from hdx.location.country import Country
+from hdx.utilities import get_uuid
+from hdx.utilities.dateparse import default_date, parse_date
 from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import script_dir_plus_file
@@ -31,8 +28,9 @@ from hdx.scraper.geonode.version import get_geonode_version
 logger = logging.getLogger(__name__)
 
 
-def create_dataset_showcase(dataset, showcase, **kwargs):
-    # type: (Dataset, Showcase, Any) -> None
+def create_dataset_showcase(
+    dataset: Dataset, showcase: Showcase, **kwargs: Any
+) -> None:
     """
     Create dataset and showcase
 
@@ -51,8 +49,7 @@ def create_dataset_showcase(dataset, showcase, **kwargs):
     showcase.add_dataset(dataset)
 
 
-def delete_from_hdx(dataset):
-    # type: (Dataset) -> None
+def delete_from_hdx(dataset: Dataset) -> None:
     """
     Delete dataset and any associated showcases
 
@@ -63,13 +60,13 @@ def delete_from_hdx(dataset):
         None
 
     """
-    logger.info('Deleting %s and any associated showcases' % dataset['title'])
+    logger.info(f"Deleting {dataset['title']} and any associated showcases")
     for showcase in dataset.get_showcases():
         showcase.delete_from_hdx()
     dataset.delete_from_hdx()
 
 
-class GeoNodeToHDX(object):
+class GeoNodeToHDX:
     """
     Utilities to bring GeoNode data into HDX. hdx_geonode_config_yaml points to a YAML file
     that overrides base values and is in this format:
@@ -98,20 +95,26 @@ class GeoNodeToHDX(object):
         downloader (Download): Download object from HDX Python Utilities
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
     """
-    def __init__(self, geonode_url, downloader, hdx_geonode_config_yaml=None):
-        # type: (str, Download, Optional[str]) -> None
+
+    def __init__(
+        self,
+        geonode_url: str,
+        downloader: Download,
+        hdx_geonode_config_yaml: Optional[str] = None,
+    ) -> None:
         self.geonode_urls = [geonode_url]
         self.downloader = downloader
-        base_hdx_geonode_config_yaml = script_dir_plus_file('hdx_geonode.yml', GeoNodeToHDX)
+        base_hdx_geonode_config_yaml = script_dir_plus_file(
+            "hdx_geonode.yml", GeoNodeToHDX
+        )
         geonode_config = load_yaml(base_hdx_geonode_config_yaml)
         if hdx_geonode_config_yaml is not None:
             geonode_config.update(load_yaml(hdx_geonode_config_yaml))
-        self.ignore_data = geonode_config['ignore_data']
-        self.category_mapping = geonode_config['category_mapping']
-        self.titleabstract_mapping = geonode_config['titleabstract_mapping']
+        self.ignore_data = geonode_config["ignore_data"]
+        self.category_mapping = geonode_config["category_mapping"]
+        self.titleabstract_mapping = geonode_config["titleabstract_mapping"]
 
-    def get_ignore_data(self):
-        # type: () -> List[str]
+    def get_ignore_data(self) -> List[str]:
         """
         Get terms in the abstract that mean that the dataset should not be added to HDX
 
@@ -121,8 +124,7 @@ class GeoNodeToHDX(object):
         """
         return self.ignore_data
 
-    def get_category_mapping(self):
-        # type: () -> Dict[str,str]
+    def get_category_mapping(self) -> Dict[str, str]:
         """
         Get mappings from the category field category__gn_description to HDX metadata tags
 
@@ -132,8 +134,7 @@ class GeoNodeToHDX(object):
         """
         return self.category_mapping
 
-    def get_titleabstract_mapping(self):
-        # type: () -> Dict[str,Union[Dict,List]]
+    def get_titleabstract_mapping(self) -> Dict[str, Union[Dict, List]]:
         """
         Get mappings from terms in the title or abstract to HDX metadata tags
 
@@ -143,8 +144,7 @@ class GeoNodeToHDX(object):
         """
         return self.titleabstract_mapping
 
-    def get_countries(self, use_count=True):
-        # type: (bool) -> List[Dict]
+    def get_countries(self, use_count: bool = True) -> List[Dict]:
         """
         Get countries from GeoNode
 
@@ -155,29 +155,32 @@ class GeoNodeToHDX(object):
             List[Dict]: List of countries in form (iso3 code, name)
 
         """
-        response = self.downloader.download('%s/api/regions' % self.geonode_urls[0])
+        response = self.downloader.download(f"{self.geonode_urls[0]}/api/regions")
         jsonresponse = response.json()
         countries = list()
-        for location in jsonresponse['objects']:
-            loccode = location['code']
-            locname = location['name_en']
+        for location in jsonresponse["objects"]:
+            loccode = location["code"]
+            locname = location["name_en"]
             if use_count:
-                count = location.get('count')
+                count = location.get("count")
                 if count is None:
-                    logger.info('Location %s (%s) has nonexistent or null count!' % (locname, loccode))
+                    logger.info(
+                        f"Location {locname} ({loccode}) has nonexistent or null count!"
+                    )
                     continue
                 if not count:
-                    logger.info('Location %s (%s) has empty or zero count!' % (locname, loccode))
+                    logger.info(
+                        f"Location {locname} ({loccode}) has empty or zero count!"
+                    )
                     continue
             countryname = Country.get_country_name_from_iso3(loccode)
             if countryname is None:
-                logger.info("Location %s (%s) isn't a country!" % (locname, loccode))
+                logger.info(f"Location {locname} ({loccode}) isn't a country!")
                 continue
-            countries.append({'iso3': loccode, 'name': countryname, 'layers': loccode})
+            countries.append({"iso3": loccode, "name": countryname, "layers": loccode})
         return countries
 
-    def get_layers(self, countryiso=None):
-        # type: (Optional[str]) -> List[Dict]
+    def get_layers(self, countryiso: Optional[str] = None) -> List[Dict]:
         """
         Get layers from GeoNode optionally for a particular country
 
@@ -188,16 +191,17 @@ class GeoNodeToHDX(object):
             List[Dict]: List of layers
         """
         if countryiso is None:
-            regionstr = ''
+            regionstr = ""
         else:
-            regionstr = '/?regions__code__in=%s' % countryiso
-        response = self.downloader.download('%s/api/layers%s' % (self.geonode_urls[0], regionstr))
+            regionstr = f"/?regions__code__in={countryiso}"
+        response = self.downloader.download(
+            f"{self.geonode_urls[0]}/api/layers{regionstr}"
+        )
         jsonresponse = response.json()
-        return jsonresponse['objects']
+        return jsonresponse["objects"]
 
     @staticmethod
-    def get_orgname(metadata, orgclass=Organization):
-        # type: (Dict, Type) -> str
+    def get_orgname(metadata: Dict, orgclass: Type = Organization) -> str:
         """
         Get orgname from Dict if available or use orgid from Dict to look up organisation name
 
@@ -209,15 +213,22 @@ class GeoNodeToHDX(object):
             str: Organisation name
 
         """
-        orgname = metadata.get('orgname')
+        orgname = metadata.get("orgname")
         if not orgname:
-            organisation = orgclass.read_from_hdx(metadata['orgid'])
-            orgname = organisation['name']
-            metadata['orgname'] = orgname
+            organisation = orgclass.read_from_hdx(metadata["orgid"])
+            orgname = organisation["name"]
+            metadata["orgname"] = orgname
         return orgname
 
-    def generate_dataset_and_showcase(self, countryiso, layer, metadata, get_date_from_title=False, process_dataset_name=lambda x: x, dataset_tags_mapping=dict()):
-        # type: (str, Dict, Dict, bool, Callable[[str], str], Dict[str, List]) -> Tuple[Optional[Dataset], Optional[List], Optional[Showcase]]
+    def generate_dataset_and_showcase(
+        self,
+        countryiso: str,
+        layer: Dict,
+        metadata: Dict,
+        get_date_from_title: bool = False,
+        process_dataset_name: Callable[[str], str] = lambda x: x,
+        dataset_tags_mapping: Dict[str, List] = dict(),
+    ) -> Tuple[Optional[Dataset], Optional[List], Optional[Showcase]]:
         """
         Generate dataset and showcase for GeoNode layer
 
@@ -232,53 +243,59 @@ class GeoNodeToHDX(object):
         Returns:
             Tuple[Optional[Dataset],List,Optional[Showcase]]: Dataset, date ranges in dataset title and Showcase objects or None, None, None
         """
-        origtitle = layer['title'].strip()
-        notes = layer['abstract']
+        origtitle = layer["title"].strip()
+        notes = layer["abstract"]
         abstract = notes.lower()
         for term in self.ignore_data:
             if term in abstract:
-                logger.warning('Ignoring %s as term %s present in abstract!' % (origtitle, term))
+                logger.warning(
+                    f"Ignoring {origtitle} as term {term} present in abstract!"
+                )
                 return None, None, None
 
-        dataset = Dataset({'title': origtitle})
+        dataset = Dataset({"title": origtitle})
         if get_date_from_title:
-            ranges = dataset.remove_dates_from_title(change_title=True, set_dataset_date=True)
+            ranges = dataset.remove_dates_from_title(
+                change_title=True, set_dataset_date=True
+            )
         else:
             ranges = list()
-        title = dataset['title']
-        logger.info('Creating dataset: %s' % title)
-        detail_url = layer['detail_url']
-        supplemental_information = layer['supplemental_information']
-        if supplemental_information.lower()[:7] == 'no info':
+        title = dataset["title"]
+        logger.info(f"Creating dataset: {title}")
+        detail_url = layer["detail_url"]
+        supplemental_information = layer["supplemental_information"]
+        if supplemental_information.lower()[:7] == "no info":
             dataset_notes = notes
         else:
-            dataset_notes = '%s\n\n%s' % (notes, supplemental_information)
-        dataset_date = parse_date(layer['date'])
+            dataset_notes = f"{notes}\n\n{supplemental_information}"
+        dataset_date = parse_date(layer["date"])
         if origtitle == title:
             dataset.set_date_of_dataset(dataset_date)
         else:
-            dataset_notes = '%s\n\nOriginal dataset title: %s' % (dataset_notes, origtitle)
-            logger.info('Using %s-%s instead of %s for dataset date' % (ranges[0][0], ranges[0][1], dataset_date))
-        slugified_name = slugify('%s_geonode_%s' % (self.get_orgname(metadata), title))
+            dataset_notes = f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
+            logger.info(
+                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {dataset_date} for dataset date"
+            )
+        slugified_name = slugify(f"{self.get_orgname(metadata)}_geonode_{title}")
         slugified_name = process_dataset_name(slugified_name)
         slugified_name = slugified_name[:90]
-        dataset['name'] = slugified_name
-        dataset['notes'] = dataset_notes
-        dataset.set_maintainer(metadata['maintainerid'])
-        dataset.set_organization(metadata['orgid'])
-        updatefreq = metadata.get('updatefreq', 'As needed')
+        dataset["name"] = slugified_name
+        dataset["notes"] = dataset_notes
+        dataset.set_maintainer(metadata["maintainerid"])
+        dataset.set_organization(metadata["orgid"])
+        updatefreq = metadata.get("updatefreq", "As needed")
         dataset.set_expected_update_frequency(updatefreq)
-        subnational = metadata.get('subnational', True)
+        subnational = metadata.get("subnational", True)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
         tags = dataset_tags_mapping.get(slugified_name, list())
-        tags.append('geodata')
-        tag = layer['category__gn_description']
+        tags.append("geodata")
+        tag = layer["category__gn_description"]
         if tag is not None:
             if tag in self.category_mapping:
                 tag = self.category_mapping[tag]
             tags.append(tag)
-        title_abstract = ('%s %s' % (title, notes)).lower()
+        title_abstract = f"{title} {notes}".lower()
         for key in self.titleabstract_mapping:
             if key in title_abstract:
                 mapping = self.titleabstract_mapping[key]
@@ -287,51 +304,67 @@ class GeoNodeToHDX(object):
                 elif isinstance(mapping, dict):
                     found = False
                     for subkey in mapping:
-                        if subkey == 'else':
+                        if subkey == "else":
                             continue
                         if subkey in title_abstract:
                             tags.extend(mapping[subkey])
                             found = True
-                    if not found and 'else' in mapping:
-                        tags.extend(mapping['else'])
+                    if not found and "else" in mapping:
+                        tags.extend(mapping["else"])
         dataset.add_tags(tags)
-        srid = quote_plus(layer['srid'])
-        if '%3Ageonode%3A' in detail_url:
-            geonode_url = 'https://%s' % detail_url.rsplit('/', 1)[-1].split('%3Ageonode%3A')[0]
+        srid = quote_plus(layer["srid"])
+        if "%3Ageonode%3A" in detail_url:
+            geonode_url = (
+                f"https://{detail_url.rsplit('/', 1)[-1].split('%3Ageonode%3A')[0]}"
+            )
             if geonode_url not in self.geonode_urls:
                 self.geonode_urls.append(geonode_url)
         else:
             geonode_url = self.geonode_urls[0]
-        typename = 'geonode:%s' % detail_url.rsplit('geonode%3A', 1)[-1]
-        resource = Resource({
-            'name': '%s shapefile' % title,
-            'url': '%s/geoserver/wfs?format_options=charset:UTF-8&typename=%s&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature' % (geonode_url, typename),
-            'description': 'Zipped Shapefile. %s' % notes
-        })
-        resource.set_file_type('zipped shapefile')
+        typename = f"geonode:{detail_url.rsplit('geonode%3A', 1)[-1]}"
+        resource = Resource(
+            {
+                "name": f"{title} shapefile",
+                "url": f"{geonode_url}/geoserver/wfs?format_options=charset:UTF-8&typename={typename}&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
+                "description": f"Zipped Shapefile. {notes}",
+            }
+        )
+        resource.set_file_type("zipped shapefile")
         dataset.add_update_resource(resource)
-        resource = Resource({
-            'name': '%s geojson' % title,
-            'url': '%s/geoserver/wfs?srsName=%s&typename=%s&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature' % (geonode_url, srid, typename),
-            'description': 'GeoJSON file. %s' % notes
-        })
-        resource.set_file_type('GeoJSON')
+        resource = Resource(
+            {
+                "name": f"{title} geojson",
+                "url": f"{geonode_url}/geoserver/wfs?srsName={srid}&typename={typename}&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
+                "description": f"GeoJSON file. {notes}",
+            }
+        )
+        resource.set_file_type("GeoJSON")
         dataset.add_update_resource(resource)
 
-        showcase = Showcase({
-            'name': '%s-showcase' % slugified_name,
-            'title': title,
-            'notes': notes,
-            'url': '%s%s' % (self.geonode_urls[0], detail_url),
-            'image_url': layer['thumbnail_url']
-        })
+        showcase = Showcase(
+            {
+                "name": f"{slugified_name}-showcase",
+                "title": title,
+                "notes": notes,
+                "url": f"{self.geonode_urls[0]}{detail_url}",
+                "image_url": layer["thumbnail_url"],
+            }
+        )
         showcase.add_tags(tags)
         return dataset, ranges, showcase
 
-    def generate_datasets_and_showcases(self, metadata, create_dataset_showcase=create_dataset_showcase,
-                                        countrydata=None, get_date_from_title=False, process_dataset_name=lambda x: x,
-                                        dataset_tags_mapping=dict(), **kwargs):
-        # type: (Dict, Callable[[Dataset, Showcase, Any], None], Dict[str, Optional[str]], bool, Callable[[str], str], Dict[str, List], Any) -> List[str]
+    def generate_datasets_and_showcases(
+        self,
+        metadata: Dict,
+        create_dataset_showcase: Callable[
+            [Dataset, Showcase, Any], None
+        ] = create_dataset_showcase,
+        countrydata: Dict[str, Optional[str]] = None,
+        get_date_from_title: bool = False,
+        process_dataset_name: Callable[[str], str] = lambda x: x,
+        dataset_tags_mapping: Dict[str, List] = dict(),
+        **kwargs: Any,
+    ) -> List[str]:
         """
         Generate datasets and showcases for all GeoNode layers
 
@@ -348,41 +381,53 @@ class GeoNodeToHDX(object):
             List[str]: List of names of datasets added or updated
 
         """
-        logger.info('--------------------------------------------------')
-        logger.info('> Using HDX Python GeoNode Library %s' % get_geonode_version())
+        logger.info("--------------------------------------------------")
+        logger.info(f"> Using HDX Python GeoNode Library {get_geonode_version()}")
         if countrydata:
             countries = [countrydata]
         else:
             countries = self.get_countries()
-            logger.info('Number of countries: %d' % len(countries))
+            logger.info(f"Number of countries: {len(countries)}")
         dataset_dates = OrderedDict()
-        if 'batch' not in kwargs:
-            kwargs['batch'] = get_uuid()
+        if "batch" not in kwargs:
+            kwargs["batch"] = get_uuid()
         for countrydata in countries:
-            layers = self.get_layers(countrydata['layers'])
-            logger.info('Number of datasets to upload in %s: %d' % (countrydata['name'], len(layers)))
+            layers = self.get_layers(countrydata["layers"])
+            logger.info(
+                f'Number of datasets to upload in {countrydata["name"]}: {len(layers)}'
+            )
             for layer in layers:
-                dataset, ranges, showcase = self.generate_dataset_and_showcase(countrydata['iso3'], layer, metadata,
-                                                                               get_date_from_title, process_dataset_name,
-                                                                               dataset_tags_mapping=dataset_tags_mapping)
+                dataset, ranges, showcase = self.generate_dataset_and_showcase(
+                    countrydata["iso3"],
+                    layer,
+                    metadata,
+                    get_date_from_title,
+                    process_dataset_name,
+                    dataset_tags_mapping=dataset_tags_mapping,
+                )
                 if dataset:
-                    dataset_name = dataset['name']
+                    dataset_name = dataset["name"]
                     max_date = default_date
                     for range in ranges:
                         if range[1] > max_date:
                             max_date = range[1]
                     prev_max = dataset_dates.get(dataset_name)
                     if prev_max and prev_max > max_date:
-                        logger.warning('Ignoring %s with max date %s!'
-                                       ' %s (dates removed) with max date %s has been created already!' %
-                                       (layer['title'], max_date, dataset_name, prev_max))
+                        logger.warning(
+                            f'Ignoring {layer["title"]} with max date {max_date}!'
+                            f" {dataset_name} (dates removed) with max date {prev_max} has been created already!"
+                        )
                         continue
                     create_dataset_showcase(dataset, showcase, **kwargs)
                     dataset_dates[dataset_name] = max_date
         return list(dataset_dates.keys())
 
-    def delete_other_datasets(self, datasets_to_keep, metadata, delete_from_hdx=delete_from_hdx):
-        # type: (List[str], Dict, Callable[[Dataset], None]) -> None
+    def delete_other_datasets(
+        self,
+        datasets_to_keep: List[str],
+        metadata: Dict,
+        delete_from_hdx: Callable[[Dataset], None] = delete_from_hdx,
+    ) -> None:
         """
         Delete all GeoNode datasets and associated showcases in HDX where layers have been deleted from
         the GeoNode server.
@@ -396,12 +441,14 @@ class GeoNodeToHDX(object):
             None
 
         """
-        for dataset in Dataset.search_in_hdx(fq='organization:%s' % self.get_orgname(metadata)):
-            if dataset['maintainer'] != metadata['maintainerid']:
+        for dataset in Dataset.search_in_hdx(
+            fq=f"organization:{self.get_orgname(metadata)}"
+        ):
+            if dataset["maintainer"] != metadata["maintainerid"]:
                 continue
-            if dataset['name'] in datasets_to_keep:
+            if dataset["name"] in datasets_to_keep:
                 continue
-            if not any(x in dataset.get_resource()['url'] for x in self.geonode_urls):
+            if not any(x in dataset.get_resource()["url"] for x in self.geonode_urls):
                 continue
-            logger.info('Deleting %s' % dataset['title'])
+            logger.info(f"Deleting {dataset['title']}")
             delete_from_hdx(dataset)
