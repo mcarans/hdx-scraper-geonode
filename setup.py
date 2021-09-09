@@ -2,9 +2,9 @@ from os.path import join
 
 from hdx.utilities import CleanCommand, PackageCommand, PublishCommand
 from hdx.utilities.loader import load_file_to_str
-from setuptools import find_packages, setup
+from setuptools import find_namespace_packages, setup
 
-requirements = ["python-slugify", "hdx-python-api>=5.3.0"]
+requirements = ["python-slugify", "hdx-python-api>=5.3.1"]
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -32,7 +32,7 @@ setup(
     keywords=["HDX", "scraper", "geonode"],
     long_description=load_file_to_str("README.md"),
     long_description_content_type="text/markdown",
-    packages=find_packages(where="src"),
+    packages=find_namespace_packages(where="src"),
     package_dir={"": "src"},
     include_package_data=True,
     setup_requires=["pytest-runner"],
