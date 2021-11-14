@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """
 GeoNode Utilities:
 -----------------
@@ -16,14 +15,14 @@ from hdx.data.organization import Organization
 from hdx.data.resource import Resource
 from hdx.data.showcase import Showcase
 from hdx.location.country import Country
-from hdx.utilities import get_uuid
 from hdx.utilities.dateparse import default_date, parse_date
 from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import script_dir_plus_file
+from hdx.utilities.uuid import get_uuid
 from slugify import slugify
 
-from hdx.scraper.geonode.version import get_geonode_version
+from . import __version__
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +43,9 @@ def create_dataset_showcase(
 
     """
     dataset.update_from_yaml()
-    dataset.create_in_hdx(remove_additional_resources=True, hxl_update=False, **kwargs)
+    dataset.create_in_hdx(
+        remove_additional_resources=True, hxl_update=False, **kwargs
+    )
     showcase.create_in_hdx()
     showcase.add_dataset(dataset)
 
@@ -155,7 +156,9 @@ class GeoNodeToHDX:
             List[Dict]: List of countries in form (iso3 code, name)
 
         """
-        response = self.downloader.download(f"{self.geonode_urls[0]}/api/regions")
+        response = self.downloader.download(
+            f"{self.geonode_urls[0]}/api/regions"
+        )
         jsonresponse = response.json()
         countries = list()
         for location in jsonresponse["objects"]:
@@ -177,7 +180,9 @@ class GeoNodeToHDX:
             if countryname is None:
                 logger.info(f"Location {locname} ({loccode}) isn't a country!")
                 continue
-            countries.append({"iso3": loccode, "name": countryname, "layers": loccode})
+            countries.append(
+                {"iso3": loccode, "name": countryname, "layers": loccode}
+            )
         return countries
 
     def get_layers(self, countryiso: Optional[str] = None) -> List[Dict]:
@@ -272,11 +277,15 @@ class GeoNodeToHDX:
         if origtitle == title:
             dataset.set_date_of_dataset(dataset_date)
         else:
-            dataset_notes = f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
+            dataset_notes = (
+                f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
+            )
             logger.info(
                 f"Using {ranges[0][0]}-{ranges[0][1]} instead of {dataset_date} for dataset date"
             )
-        slugified_name = slugify(f"{self.get_orgname(metadata)}_geonode_{title}")
+        slugified_name = slugify(
+            f"{self.get_orgname(metadata)}_geonode_{title}"
+        )
         slugified_name = process_dataset_name(slugified_name)
         slugified_name = slugified_name[:90]
         dataset["name"] = slugified_name
@@ -314,9 +323,7 @@ class GeoNodeToHDX:
         dataset.add_tags(tags)
         srid = quote_plus(layer["srid"])
         if "%3Ageonode%3A" in detail_url:
-            geonode_url = (
-                f"https://{detail_url.rsplit('/', 1)[-1].split('%3Ageonode%3A')[0]}"
-            )
+            geonode_url = f"https://{detail_url.rsplit('/', 1)[-1].split('%3Ageonode%3A')[0]}"
             if geonode_url not in self.geonode_urls:
                 self.geonode_urls.append(geonode_url)
         else:
@@ -382,7 +389,7 @@ class GeoNodeToHDX:
 
         """
         logger.info("--------------------------------------------------")
-        logger.info(f"> Using HDX Python GeoNode Library {get_geonode_version()}")
+        logger.info(f"> Using HDX Python GeoNode Library {__version__}")
         if countrydata:
             countries = [countrydata]
         else:
@@ -448,7 +455,9 @@ class GeoNodeToHDX:
                 continue
             if dataset["name"] in datasets_to_keep:
                 continue
-            if not any(x in dataset.get_resource()["url"] for x in self.geonode_urls):
+            if not any(
+                x in dataset.get_resource()["url"] for x in self.geonode_urls
+            ):
                 continue
             logger.info(f"Deleting {dataset['title']}")
             delete_from_hdx(dataset)

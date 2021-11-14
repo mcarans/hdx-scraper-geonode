@@ -2,40 +2,40 @@ ignore_data:
   - deprecated
 
 category_mapping:
-  Elevation: 'elevation - topography - altitude'
+  Elevation: "elevation - topography - altitude"
   Boundaries: geodata
-  Location: 'populated places - settlements'
+  Location: "populated places - settlements"
   Transportation: transportation
-  Structure: 'facilities and infrastructure'
+  Structure: "facilities and infrastructure"
   Environment: environment
-  'Inland Waters': river
-  'Physical Features, Land Cover, Land Use, DEM': 'land use and land cover'
-  Farming: 'food production'
-  'Natural Hazards': 'hazards and risk'
+  Inland Waters: river
+  "Physical Features, Land Cover, Land Use, DEM": "land use and land cover"
+  Farming: "food production"
+  "Natural Hazards": "hazards and risk"
 
 titleabstract_mapping:
-  'land cover':
-    - 'land use and land cover'
+  "land cover":
+    - "land use and land cover"
   forest:
-    - 'land use and land cover'
+    - "land use and land cover"
   landslide:
-    - 'landslides - mudslides'
+    - "landslides - mudslides"
   flood:
-    - 'floods - storm surges'
+    - "floods - storm surges"
   drought:
     - droughts
-  'emergency levels':
-    - 'hazards and risk'
-  'food distribution':
-    - 'food assistance'
+  "emergency levels":
+    - "hazards and risk"
+  "food distribution":
+    - "food assistance"
   frost:
-    - 'cold waves'
+    - "cold waves"
   erosion:
     - erosion
   mudflow:
-    - 'landslides - mudslides'
+    - "landslides - mudslides"
   mudslide:
-    - 'landslides - mudslides'
+    - "landslides - mudslides"
   streets:
     - roads
     - transportation
@@ -44,34 +44,34 @@ titleabstract_mapping:
     - transportation
   airport:
     - aviation
-    - 'facilities and infrastructure'
+    - "facilities and infrastructure"
   airstrip:
     - aviation
-    - 'facilities and infrastructure'
+    - "facilities and infrastructure"
   bridges:
     - bridges
     - transportation
-    - 'facilities and infrastructure'
+    - "facilities and infrastructure"
   admin:
     boundaries:
-      - 'administrative divisions'
+      - "administrative divisions"
   security:
     food:
-      - 'food security'
+      - "food security"
     else:
       - security
   refugee:
     camp:
-      - 'displaced persons locations - camps - shelters'
+      - "displaced persons locations - camps - shelters"
       - refugees
     else:
       - refugees
   idp:
     camp:
-      - 'displaced persons locations - camps - shelters'
-      - 'internally displaced persons - idp'
+      - "displaced persons locations - camps - shelters"
+      - "internally displaced persons - idp"
     else:
-      - 'internally displaced persons - idp'
+      - "internally displaced persons - idp"
   nutrition:
     malnutrition:
       - malnutrition
