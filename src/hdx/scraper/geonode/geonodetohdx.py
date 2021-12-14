@@ -299,7 +299,7 @@ class GeoNodeToHDX:
         dataset.add_country_location(countryiso)
         tags = dataset_tags_mapping.get(slugified_name, list())
         tags.append("geodata")
-        tag = layer.get("category__gn_description", None)
+        tag = layer.get("category__gn_description")
         if tag is not None:
             if tag in self.category_mapping:
                 tag = self.category_mapping[tag]
