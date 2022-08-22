@@ -1,6 +1,6 @@
 """Geonode scraper Tests"""
 import copy
-from datetime import datetime
+from datetime import datetime, timezone
 from os.path import join
 
 import pytest
@@ -74,7 +74,7 @@ class TestGeoNodeToHDX:
             "category__gn_description": "Location",
             "csw_type": "dataset",
             "csw_wkt_geometry": "POLYGON(456)",
-            "date": "2019-08-05T22:06:00",
+            "date": "2019-08-05T00:00:00",
             "detail_url": "/layers/geonode%3Ammr_town_2019_july",
             "distribution_description": "Web address (URL)",
             "distribution_url": "http://geonode.themimu.info/layers/geonode%3Ammr_town_2019_july",
@@ -94,7 +94,7 @@ class TestGeoNodeToHDX:
             "category__gn_description": None,
             "csw_type": "dataset",
             "csw_wkt_geometry": "POLYGON(567)",
-            "date": "2019-02-12T11:12:00",
+            "date": "2019-02-12T00:00:00",
             "detail_url": "/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp",
             "distribution_description": "Web address (URL)",
             "distribution_url": "http://geonode.themimu.info/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp",
@@ -116,7 +116,7 @@ class TestGeoNodeToHDX:
         "category__gn_description": None,
         "csw_type": "dataset",
         "csw_wkt_geometry": "POLYGON(567)",
-        "date": "2018-02-12T11:12:00",
+        "date": "2018-02-12T00:00:00",
         "detail_url": "/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp",
         "distribution_description": "Web address (URL)",
         "distribution_url": "http://geonode.themimu.info/layers/geonode%3Amyan_lvl2_smoothed_dec2015_resamp",
@@ -188,7 +188,7 @@ class TestGeoNodeToHDX:
             "notes": "This layer contains...\n\nOriginal dataset title: ICA Sudan, 2018 - Land Degradation, 2001-2013",
             "maintainer": "d7a13725-5cb5-48f4-87ac-a70b5cea531e",
             "owner_org": "3ecac442-7fed-448d-8f78-b385ef6f84e7",
-            "dataset_date": "[2001-01-01T00:00:00 TO 2013-12-31T00:00:00]",
+            "dataset_date": "[2001-01-01T00:00:00 TO 2013-12-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "sdn"}],
@@ -209,7 +209,7 @@ class TestGeoNodeToHDX:
             "notes": "This layer contains...\n\nOriginal dataset title: ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014",
             "maintainer": "d7a13725-5cb5-48f4-87ac-a70b5cea531e",
             "owner_org": "3ecac442-7fed-448d-8f78-b385ef6f84e7",
-            "dataset_date": "[2014-01-01T00:00:00 TO 2014-12-31T00:00:00]",
+            "dataset_date": "[2014-01-01T00:00:00 TO 2014-12-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "sdn"}],
@@ -331,7 +331,7 @@ class TestGeoNodeToHDX:
             "notes": "Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July",
             "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
             "owner_org": "bde18602-2e92-462a-8e88-a0018a7b13f9",
-            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]",
+            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "mmr"}],
@@ -356,7 +356,7 @@ class TestGeoNodeToHDX:
             "notes": "A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES\n\nOriginal dataset title: Myanmar 2002-2014 Forest Cover Change",
             "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
             "owner_org": "bde18602-2e92-462a-8e88-a0018a7b13f9",
-            "dataset_date": "[2002-01-01T00:00:00 TO 2014-12-31T00:00:00]",
+            "dataset_date": "[2002-01-01T00:00:00 TO 2014-12-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "mmr"}],
@@ -471,7 +471,7 @@ class TestGeoNodeToHDX:
 
     mimudataset_withdate = {
         "title": "Myanmar Town 2019 July",
-        "dataset_date": "[2019-08-05T22:06:00 TO 2019-08-05T22:06:00]",
+        "dataset_date": "[2019-08-05T00:00:00 TO 2019-08-05T00:00:00]",
         "name": "mimu-geonode-myanmar-town-2019-july",
         "notes": "Towns are urban areas divided into wards.\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.",
         "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
@@ -494,7 +494,7 @@ class TestGeoNodeToHDX:
         mimudataset_withdate,
         {
             "title": "Myanmar 2002-2014 Forest Cover Change",
-            "dataset_date": "[2019-02-12T11:12:00 TO 2019-02-12T11:12:00]",
+            "dataset_date": "[2019-02-12T00:00:00 TO 2019-02-12T00:00:00]",
             "name": "mimu-geonode-myanmar-2002-2014-forest-cover-change",
             "notes": "A Landsat-based classification of Myanmar’s forest cover\n\nLAND COVER CLASSES",
             "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
@@ -744,8 +744,14 @@ class TestGeoNodeToHDX:
         resources = dataset.get_resources()
         assert resources == self.wfpresources[0]
         assert ranges == [
-            (datetime(2001, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)),
-            (datetime(2018, 1, 1, 0, 0), datetime(2018, 12, 31, 0, 0)),
+            (
+                datetime(2001, 1, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2013, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
+            ),
+            (
+                datetime(2018, 1, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2018, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
+            ),
         ]
         assert showcase == self.wfpshowcases[0]
 
@@ -759,8 +765,14 @@ class TestGeoNodeToHDX:
         resources = dataset.get_resources()
         assert resources == self.wfpresources[1]
         assert ranges == [
-            (datetime(2014, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0)),
-            (datetime(2018, 1, 1, 0, 0), datetime(2018, 12, 31, 0, 0)),
+            (
+                datetime(2014, 1, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2014, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
+            ),
+            (
+                datetime(2018, 1, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2018, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
+            ),
         ]
         assert showcase == self.wfpshowcases[1]
         assert geonodetohdx.geonode_urls[1] == "https://ogcserver.gis.wfp.org"
@@ -777,7 +789,10 @@ class TestGeoNodeToHDX:
         resources = dataset.get_resources()
         assert resources == self.mimuresources[0]
         assert ranges == [
-            (datetime(2019, 7, 1, 0, 0), datetime(2019, 7, 31, 0, 0))
+            (
+                datetime(2019, 7, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2019, 7, 31, 23, 59, 59, tzinfo=timezone.utc),
+            )
         ]
         assert showcase == self.mimushowcases[0]
 
@@ -791,7 +806,10 @@ class TestGeoNodeToHDX:
         resources = dataset.get_resources()
         assert resources == self.mimuresources[1]
         assert ranges == [
-            (datetime(2002, 1, 1, 0, 0), datetime(2014, 12, 31, 0, 0))
+            (
+                datetime(2002, 1, 1, 0, 0, tzinfo=timezone.utc),
+                datetime(2014, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
+            )
         ]
         assert showcase == self.mimushowcases[1]
 
@@ -839,7 +857,7 @@ class TestGeoNodeToHDX:
             "notes": "Towns are urban areas divided into wards. landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July",
             "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
             "owner_org": "bde18602-2e92-462a-8e88-a0018a7b13f9",
-            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]",
+            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "mmr"}],
@@ -940,7 +958,7 @@ class TestGeoNodeToHDX:
             "notes": "Towns are urban areas divided into wards. security nutrition\n\nPlace name from GAD, transliteration by MIMU. Names available in Myanmar Unicode 3 and Roman script.\n\nOriginal dataset title: Myanmar Town 2019 July",
             "maintainer": "196196be-6037-4488-8b71-d786adf4c081",
             "owner_org": "bde18602-2e92-462a-8e88-a0018a7b13f9",
-            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T00:00:00]",
+            "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "mmr"}],
