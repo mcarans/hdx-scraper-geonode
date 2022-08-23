@@ -9,7 +9,7 @@ platform for developing geospatial information systems (GIS) and for deploying s
 data infrastructures (SDI). 
 
 For more information, please read the 
-[documentation](https://hdx-python-api.readthedocs.io/en/latest/). 
+[documentation](https://hdx-scraper-geonode.readthedocs.io/en/latest/). 
 
 This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) 
 (HDX) project. If you have humanitarian related data, please upload your datasets to 
