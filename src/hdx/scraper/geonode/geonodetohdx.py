@@ -261,7 +261,7 @@ class GeoNodeToHDX:
         dataset = Dataset({"title": origtitle})
         if get_date_from_title:
             ranges = dataset.remove_dates_from_title(
-                change_title=True, set_dataset_date=True
+                change_title=True, set_reference_period=True
             )
         else:
             ranges = list()
@@ -273,15 +273,15 @@ class GeoNodeToHDX:
             dataset_notes = notes
         else:
             dataset_notes = f"{notes}\n\n{supplemental_information}"
-        dataset_date = parse_date(layer["date"])
+        reference_period = parse_date(layer["date"])
         if origtitle == title:
-            dataset.set_date_of_dataset(dataset_date)
+            dataset.set_reference_period(reference_period)
         else:
             dataset_notes = (
                 f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
             )
             logger.info(
-                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {dataset_date} for dataset date"
+                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {reference_period} for reference period"
             )
         slugified_name = slugify(
             f"{self.get_orgname(metadata)}_geonode_{title}"
@@ -395,7 +395,7 @@ class GeoNodeToHDX:
         else:
             countries = self.get_countries()
             logger.info(f"Number of countries: {len(countries)}")
-        dataset_dates = OrderedDict()
+        reference_periods = OrderedDict()
         if "batch" not in kwargs:
             kwargs["batch"] = get_uuid()
         for countrydata in countries:
@@ -418,7 +418,7 @@ class GeoNodeToHDX:
                     for range in ranges:
                         if range[1] > max_date:
                             max_date = range[1]
-                    prev_max = dataset_dates.get(dataset_name)
+                    prev_max = reference_periods.get(dataset_name)
                     if prev_max and prev_max > max_date:
                         logger.warning(
                             f'Ignoring {layer["title"]} with max date {max_date}!'
@@ -426,8 +426,8 @@ class GeoNodeToHDX:
                         )
                         continue
                     create_dataset_showcase(dataset, showcase, **kwargs)
-                    dataset_dates[dataset_name] = max_date
-        return list(dataset_dates.keys())
+                    reference_periods[dataset_name] = max_date
+        return list(reference_periods.keys())
 
     def delete_other_datasets(
         self,
