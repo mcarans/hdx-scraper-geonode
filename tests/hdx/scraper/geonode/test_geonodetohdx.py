@@ -14,6 +14,7 @@ from hdx.scraper.geonode.geonodetohdx import GeoNodeToHDX
 
 
 class TestGeoNodeToHDX:
+    dataset_codlevel_mapping = {"mimu-geonode-myanmar-town": "cod-standard"}
     dataset_tags_mapping = {
         "mimu-geonode-myanmar-town": ["common operational dataset - cod"]
     }
@@ -333,6 +334,7 @@ class TestGeoNodeToHDX:
             "owner_org": "bde18602-2e92-462a-8e88-a0018a7b13f9",
             "dataset_date": "[2019-07-01T00:00:00 TO 2019-07-31T23:59:59]",
             "data_update_frequency": "-2",
+            "cod_level": "cod-standard",
             "subnational": "1",
             "groups": [{"name": "mmr"}],
             "tags": [
@@ -783,6 +785,7 @@ class TestGeoNodeToHDX:
             TestGeoNodeToHDX.mimulayersdata[0],
             self.mimumetadata,
             get_date_from_title=True,
+            dataset_codlevel_mapping=self.dataset_codlevel_mapping,
             dataset_tags_mapping=self.dataset_tags_mapping,
         )
         assert dataset == self.mimudatasets[0]
@@ -1008,6 +1011,7 @@ class TestGeoNodeToHDX:
             create_dataset_showcase=create_dataset_showcase,
             countrydata={"iso3": "MMR", "name": "Myanmar", "layers": None},
             get_date_from_title=True,
+            dataset_codlevel_mapping=self.dataset_codlevel_mapping,
             dataset_tags_mapping=self.dataset_tags_mapping,
         )
         assert datasets == self.mimudatasets
@@ -1022,6 +1026,7 @@ class TestGeoNodeToHDX:
             create_dataset_showcase=create_dataset_showcase,
             countrydata={"iso3": "MMR", "name": "Myanmar", "layers": None},
             get_date_from_title=True,
+            dataset_codlevel_mapping=self.dataset_codlevel_mapping,
             dataset_tags_mapping=self.dataset_tags_mapping,
         )
         assert datasets == self.mimudatasets

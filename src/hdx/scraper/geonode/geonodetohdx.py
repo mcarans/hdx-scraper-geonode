@@ -232,6 +232,7 @@ class GeoNodeToHDX:
         metadata: Dict,
         get_date_from_title: bool = False,
         process_dataset_name: Callable[[str], str] = lambda x: x,
+        dataset_codlevel_mapping: Dict[str, List] = dict(),
         dataset_tags_mapping: Dict[str, List] = dict(),
     ) -> Tuple[Optional[Dataset], Optional[List], Optional[Showcase]]:
         """
@@ -243,6 +244,7 @@ class GeoNodeToHDX:
             metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
+            dataset_codlevel_mapping (Dict[str, List]): Mapping from dataset name to cod levels. Defaults to empty dictionary.
             dataset_tags_mapping (Dict[str, List]): Mapping from dataset name to additional tags. Defaults to empty dictionary.
 
         Returns:
@@ -297,6 +299,9 @@ class GeoNodeToHDX:
         subnational = metadata.get("subnational", True)
         dataset.set_subnational(subnational)
         dataset.add_country_location(countryiso)
+        cod_level = dataset_codlevel_mapping.get(slugified_name)
+        if cod_level:
+            dataset["cod_level"] = cod_level
         tags = dataset_tags_mapping.get(slugified_name, list())
         tags.append("geodata")
         tag = layer.get("category__gn_description")
@@ -369,6 +374,7 @@ class GeoNodeToHDX:
         countrydata: Dict[str, Optional[str]] = None,
         get_date_from_title: bool = False,
         process_dataset_name: Callable[[str], str] = lambda x: x,
+        dataset_codlevel_mapping: Dict[str, List] = dict(),
         dataset_tags_mapping: Dict[str, List] = dict(),
         **kwargs: Any,
     ) -> List[str]:
@@ -381,6 +387,7 @@ class GeoNodeToHDX:
             countrydata (Dict[str, Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
+            dataset_codlevel_mapping (Dict[str, List]): Mapping from dataset name to cod levels. Defaults to empty dictionary.
             dataset_tags_mapping (Dict[str, List]): Mapping from dataset name to additional tags. Defaults to empty dictionary.
             **kwargs: Args to pass to dataset create_in_hdx call
 
@@ -410,6 +417,7 @@ class GeoNodeToHDX:
                     metadata,
                     get_date_from_title,
                     process_dataset_name,
+                    dataset_codlevel_mapping=dataset_codlevel_mapping,
                     dataset_tags_mapping=dataset_tags_mapping,
                 )
                 if dataset:
