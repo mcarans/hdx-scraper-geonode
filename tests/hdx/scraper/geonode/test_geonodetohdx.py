@@ -199,7 +199,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -220,7 +220,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -293,7 +293,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -310,7 +310,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -339,15 +339,11 @@ class TestGeoNodeToHDX:
             "groups": [{"name": "mmr"}],
             "tags": [
                 {
-                    "name": "common operational dataset - cod",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
                     "name": "geodata",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "populated places - settlements",
+                    "name": "populated places-settlements",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -368,7 +364,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -437,15 +433,11 @@ class TestGeoNodeToHDX:
             "image_url": "http://geonode.themimu.info/uploaded/thumbs/layer-3bc1761a-b7f7-11e9-9231-42010a80000c-thumb.png",
             "tags": [
                 {
-                    "name": "common operational dataset - cod",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
                     "name": "geodata",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "populated places - settlements",
+                    "name": "populated places-settlements",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -462,7 +454,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -487,7 +479,7 @@ class TestGeoNodeToHDX:
                 "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
             },
             {
-                "name": "populated places - settlements",
+                "name": "populated places-settlements",
                 "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
             },
         ],
@@ -510,7 +502,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -530,7 +522,7 @@ class TestGeoNodeToHDX:
                 "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
             },
             {
-                "name": "populated places - settlements",
+                "name": "populated places-settlements",
                 "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
             },
         ],
@@ -549,7 +541,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "land use and land cover",
+                    "name": "topography",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -594,39 +586,32 @@ class TestGeoNodeToHDX:
             ]
         )  # add locations used in tests
         Country.countriesdata(False)
-        Vocabulary._tags_dict = True
+        Vocabulary._tags_dict = {}
+
+        tags = (
+            "geodata",
+            "populated places-settlements",
+            "topography",
+            "natural disasters",
+            "flooding-storm surge",
+            "drought",
+            "food security",
+            "hazards and risk",
+            "administrative boundaries-divisions",
+            "complex emergency-conflict-security",
+            "refugees",
+            "internally displaced persons-idp",
+            "malnutrition",
+            "nutrition",
+            "roads",
+            "transportation",
+            "aviation",
+            "facilities-infrastructure",
+            "cash voucher assistance-cva",
+        )
+        tags = [{"name": tag} for tag in tags]
         Vocabulary._approved_vocabulary = {
-            "tags": [
-                {"name": "geodata"},
-                {"name": "populated places - settlements"},
-                {"name": "land use and land cover"},
-                {"name": "erosion"},
-                {"name": "landslides - mudslides"},
-                {"name": "floods - storm surges"},
-                {"name": "droughts"},
-                {"name": "food assistance"},
-                {"name": "hazards and risk"},
-                {"name": "administrative divisions"},
-                {"name": "food security"},
-                {"name": "security"},
-                {"name": "displaced persons locations - camps - shelters"},
-                {"name": "refugees"},
-                {"name": "internally displaced persons - idp"},
-                {"name": "malnutrition"},
-                {"name": "nutrition"},
-                {"name": "food assistance"},
-                {"name": "roads"},
-                {"name": "transportation"},
-                {"name": "aviation"},
-                {"name": "facilities and infrastructure"},
-                {"name": "bridges"},
-                {"name": "transportation"},
-                {"name": "facilities and infrastructure"},
-                {"name": "cold waves"},
-                {"name": "cash assistance"},
-                {"name": "acronyms"},
-                {"name": "common operational dataset - cod"},
-            ],
+            "tags": tags,
             "id": "4e61d464-4943-4e97-973a-84673c1aaa87",
             "name": "approved",
         }
@@ -870,19 +855,11 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "acronyms",
+                    "name": "natural disasters",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "landslides - mudslides",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "floods - storm surges",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "droughts",
+                    "name": "flooding-storm surge",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
@@ -890,15 +867,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "food assistance",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "cold waves",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "erosion",
+                    "name": "food security",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
@@ -914,23 +883,15 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "facilities and infrastructure",
+                    "name": "facilities-infrastructure",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "bridges",
+                    "name": "administrative boundaries-divisions",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "administrative divisions",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "food security",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "displaced persons locations - camps - shelters",
+                    "name": "populated places-settlements",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
@@ -938,7 +899,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "internally displaced persons - idp",
+                    "name": "internally displaced persons-idp",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
@@ -946,7 +907,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "cash assistance",
+                    "name": "cash voucher assistance-cva",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
             ],
@@ -971,11 +932,7 @@ class TestGeoNodeToHDX:
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {
-                    "name": "acronyms",
-                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
-                },
-                {
-                    "name": "security",
+                    "name": "complex emergency-conflict-security",
                     "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
                 },
                 {

@@ -4,7 +4,7 @@ ignore_data:
 category_mapping:
   Elevation: "topography"
   Boundaries: geodata
-  Location: "populated places"
+  Location: "populated places-settlements"
   Transportation: transportation
   Structure: "facilities-infrastructure"
   Environment: environment
@@ -22,7 +22,7 @@ titleabstract_mapping:
     - "natural disasters"
   flood:
     - "flooding-storm surge"
-  drought:
+  droughts:
     - drought
   "emergency levels":
     - "hazards and risk"
@@ -60,13 +60,13 @@ titleabstract_mapping:
       - "complex emergency-conflict-security"
   refugee:
     camp:
-      - settlements
+      - "populated places-settlements"
       - refugees
     else:
       - refugees
   idp:
     camp:
-      - settlements
+      - "populated places-settlements"
       - "internally displaced persons-idp"
     else:
       - "internally displaced persons-idp"
