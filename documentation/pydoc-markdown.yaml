@@ -1,0 +1,24 @@
+loaders:
+  - type: python
+    search_path:
+      - ../src
+    packages:
+      - hdx.scraper.geonode
+renderer:
+  type: mkdocs
+  output_directory: docs
+  mkdocs_config:
+    site_name: HDX Scraper GeoNode
+    theme: readthedocs
+    repo_url: "https://github.com/OCHA-DAP/hdx-scraper-geonode"
+  markdown:
+    source_linker:
+      type: github
+      repo: OCHA-DAP/hdx-scraper-geonode
+  pages:
+    - title: Home
+      name: index
+      source: main.md
+    - title: API Documentation
+      contents:
+        - hdx.scraper.geonode.geonodetohdx.*
