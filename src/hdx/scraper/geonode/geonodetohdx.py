@@ -10,6 +10,9 @@ from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 from urllib.parse import quote_plus
 
+from slugify import slugify
+
+from . import __version__
 from hdx.data.dataset import Dataset
 from hdx.data.organization import Organization
 from hdx.data.resource import Resource
@@ -20,9 +23,6 @@ from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import script_dir_plus_file
 from hdx.utilities.uuid import get_uuid
-from slugify import slugify
-
-from . import __version__
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +106,7 @@ class GeoNodeToHDX:
         self.geonode_urls = [geonode_url]
         self.downloader = downloader
         base_hdx_geonode_config_yaml = script_dir_plus_file(
-            "hdx_geonode.yml", GeoNodeToHDX
+            "hdx_geonode.yaml", GeoNodeToHDX
         )
         geonode_config = load_yaml(base_hdx_geonode_config_yaml)
         if hdx_geonode_config_yaml is not None:
