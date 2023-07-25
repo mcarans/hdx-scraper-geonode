@@ -234,6 +234,7 @@ class TestGeoNodeToHDX:
                 "url": "http://xxx/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "Zipped Shapefile. This layer contains...",
                 "format": "shp",
+                "last_modified": "2018-11-22T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -242,6 +243,7 @@ class TestGeoNodeToHDX:
                 "url": "http://xxx/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_landdegradation_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "GeoJSON file. This layer contains...",
                 "format": "geojson",
+                "last_modified": "2018-11-22T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -252,6 +254,7 @@ class TestGeoNodeToHDX:
                 "url": "https://ogcserver.gis.wfp.org/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "Zipped Shapefile. This layer contains...",
                 "format": "shp",
+                "last_modified": "2018-11-22T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -260,6 +263,7 @@ class TestGeoNodeToHDX:
                 "url": "https://ogcserver.gis.wfp.org/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "GeoJSON file. This layer contains...",
                 "format": "geojson",
+                "last_modified": "2018-11-22T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -378,6 +382,7 @@ class TestGeoNodeToHDX:
                 "url": "http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:mmr_town_2019_july&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "Zipped Shapefile. Towns are urban areas divided into wards.",
                 "format": "shp",
+                "last_modified": "2019-08-05T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -386,6 +391,7 @@ class TestGeoNodeToHDX:
                 "url": "http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:mmr_town_2019_july&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "GeoJSON file. Towns are urban areas divided into wards.",
                 "format": "geojson",
+                "last_modified": "2019-08-05T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -396,6 +402,7 @@ class TestGeoNodeToHDX:
                 "url": "http://yyy/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "Zipped Shapefile. A Landsat-based classification of Myanmar’s forest cover",
                 "format": "shp",
+                "last_modified": "2019-02-12T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -404,6 +411,7 @@ class TestGeoNodeToHDX:
                 "url": "http://yyy/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:myan_lvl2_smoothed_dec2015_resamp&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
                 "description": "GeoJSON file. A Landsat-based classification of Myanmar’s forest cover",
                 "format": "geojson",
+                "last_modified": "2019-02-12T00:00:00",
                 "resource_type": "api",
                 "url_type": "api",
             },
@@ -625,45 +633,24 @@ class TestGeoNodeToHDX:
 
         class Download:
             @staticmethod
-            def download(url):
-                response = Response()
+            def download_json(url):
                 if url == "http://xxx/api/regions":
-
-                    def fn():
-                        return {"objects": TestGeoNodeToHDX.wfplocationsdata}
-
-                    response.json = fn
+                    return {"objects": TestGeoNodeToHDX.wfplocationsdata}
                 elif url == "http://xxx/api/layers/?regions__code__in=SDN":
-
-                    def fn():
-                        return {"objects": TestGeoNodeToHDX.wfplayersdata}
-
-                    response.json = fn
+                    return {"objects": TestGeoNodeToHDX.wfplayersdata}
                 elif url == "http://yyy/api/layers":
-
-                    def fn():
-                        return {"objects": TestGeoNodeToHDX.mimulayersdata}
-
-                    response.json = fn
+                    return {"objects": TestGeoNodeToHDX.mimulayersdata}
                 elif url == "http://zzz/api/layers":
-
-                    def fn():
-                        return {
-                            "objects": TestGeoNodeToHDX.mimulayersdata
-                            + [TestGeoNodeToHDX.oldmimulayer]
-                        }
-
-                    response.json = fn
+                    return {
+                        "objects": TestGeoNodeToHDX.mimulayersdata
+                        + [TestGeoNodeToHDX.oldmimulayer]
+                    }
                 elif url == "http://aaa/api/layers":
-
-                    def fn():
-                        return {
-                            "objects": TestGeoNodeToHDX.mimulayersdata
-                            + [TestGeoNodeToHDX.mimulayersdata[0]]
-                        }
-
-                    response.json = fn
-                return response
+                    return {
+                        "objects": TestGeoNodeToHDX.mimulayersdata
+                        + [TestGeoNodeToHDX.mimulayersdata[0]]
+                    }
+                return None
 
         return Download()
 

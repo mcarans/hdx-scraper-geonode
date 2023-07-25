@@ -95,6 +95,7 @@ class GeoNodeToHDX:
         geonode_url (str): GeoNode server url
         downloader (Download): Download object from HDX Python Utilities
         hdx_geonode_config_yaml (Optional[str]): Configuration file for scraper
+
     """
 
     def __init__(
@@ -156,10 +157,9 @@ class GeoNodeToHDX:
             List[Dict]: List of countries in form (iso3 code, name)
 
         """
-        response = self.downloader.download(
+        jsonresponse = self.downloader.download_json(
             f"{self.geonode_urls[0]}/api/regions"
         )
-        jsonresponse = response.json()
         countries = list()
         for location in jsonresponse["objects"]:
             loccode = location["code"]
@@ -199,10 +199,9 @@ class GeoNodeToHDX:
             regionstr = ""
         else:
             regionstr = f"/?regions__code__in={countryiso}"
-        response = self.downloader.download(
+        jsonresponse = self.downloader.download_json(
             f"{self.geonode_urls[0]}/api/layers{regionstr}"
         )
-        jsonresponse = response.json()
         return jsonresponse["objects"]
 
     @staticmethod
@@ -275,15 +274,15 @@ class GeoNodeToHDX:
             dataset_notes = notes
         else:
             dataset_notes = f"{notes}\n\n{supplemental_information}"
-        reference_period = parse_date(layer["date"])
+        date = parse_date(layer["date"])
         if origtitle == title:
-            dataset.set_reference_period(reference_period)
+            dataset.set_reference_period(date)
         else:
             dataset_notes = (
                 f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
             )
             logger.info(
-                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {reference_period} for reference period"
+                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {date} for reference period"
             )
         slugified_name = slugify(
             f"{self.get_orgname(metadata)}_geonode_{title}"
@@ -342,6 +341,7 @@ class GeoNodeToHDX:
             }
         )
         resource.set_file_type("zipped shapefile")
+        resource.set_date_data_updated(date)
         dataset.add_update_resource(resource)
         resource = Resource(
             {
@@ -351,6 +351,7 @@ class GeoNodeToHDX:
             }
         )
         resource.set_file_type("GeoJSON")
+        resource.set_date_data_updated(date)
         dataset.add_update_resource(resource)
 
         showcase = Showcase(
