@@ -9,7 +9,7 @@ renderer:
   output_directory: docs
   mkdocs_config:
     site_name: HDX Scraper GeoNode
-    theme: readthedocs
+    theme: mkdocs
     repo_url: "https://github.com/OCHA-DAP/hdx-scraper-geonode"
   markdown:
     source_linker:
