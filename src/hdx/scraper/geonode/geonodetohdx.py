@@ -372,6 +372,7 @@ class GeoNodeToHDX:
         create_dataset_showcase: Callable[
             [Dataset, Showcase, Any], None
         ] = create_dataset_showcase,
+        use_count: bool = True,
         countrydata: Dict[str, Optional[str]] = None,
         get_date_from_title: bool = False,
         process_dataset_name: Callable[[str], str] = lambda x: x,
@@ -385,6 +386,7 @@ class GeoNodeToHDX:
         Args:
             metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             create_dataset_showcase (Callable[[Dataset, Showcase, Any], None]): Function to call to create dataset and showcase
+            use_count (bool): Whether to use null count metadata to exclude countries. Defaults to True.
             countrydata (Dict[str, Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
@@ -401,7 +403,7 @@ class GeoNodeToHDX:
         if countrydata:
             countries = [countrydata]
         else:
-            countries = self.get_countries()
+            countries = self.get_countries(use_count=use_count)
             logger.info(f"Number of countries: {len(countries)}")
         reference_periods = OrderedDict()
         if "batch" not in kwargs:
