@@ -308,6 +308,8 @@ class GeoNodeToHDX:
             if tag in self.category_mapping:
                 tag = self.category_mapping[tag]
             tags.append(tag)
+        keywords = layer.get("keywords", [])
+        tags.extend(keywords)
         title_abstract = f"{title} {notes}".lower()
         for key in self.titleabstract_mapping:
             if key in title_abstract:
