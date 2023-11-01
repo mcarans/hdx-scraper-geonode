@@ -136,7 +136,7 @@ class TestGeoNodeToHDX:
     wfplayersdata = [
         {
             "abstract": "This layer contains...",
-            "category__gn_description": "Physical Features, Land Cover, Land Use, DEM",
+            "category__gn_description": "Physical Features, Land Cover, Land Use",
             "csw_type": "dataset",
             "csw_wkt_geometry": "POLYGON(456)",
             "date": "2018-11-22T16:56:00",
@@ -144,6 +144,7 @@ class TestGeoNodeToHDX:
             "distribution_description": "Web address (URL)",
             "distribution_url": "https://geonode.wfp.org/layers/geonode%3Asdn_ica_landdegradation_geonode_20180201",
             "id": 9110,
+            "keywords": ["DEM"],
             "owner__username": "stefano.cairo",
             "popular_count": 223,
             "rating": 0,
