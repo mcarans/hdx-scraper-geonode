@@ -275,7 +275,13 @@ class GeoNodeToHDX:
         else:
             dataset_notes = f"{notes}\n\n{supplemental_information}"
         date = parse_date(layer["date"])
-        if origtitle == title:
+        temporal_extent_start = layer.get("temporal_extent_start")
+        if temporal_extent_start:
+            temporal_extent_end = layer["temporal_extent_end"]
+            dataset.set_reference_period(
+                temporal_extent_start, temporal_extent_end
+            )
+        elif origtitle == title:
             dataset.set_reference_period(date)
         else:
             dataset_notes = (

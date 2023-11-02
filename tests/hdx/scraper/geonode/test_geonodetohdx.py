@@ -175,6 +175,28 @@ class TestGeoNodeToHDX:
             "title": "ICA Sudan, 2018 - Most Predominant Livelihood Zones, 2014",
             "uuid": "e4cc9008-ee69-11e8-a005-005056822e38",
         },
+        {
+            "abstract": "This layer contains...",
+            "category__gn_description": "Physical Features, Land Cover, Land Use, DEM",
+            "csw_type": "dataset",
+            "csw_wkt_geometry": "POLYGON(567)",
+            "date": "2018-11-22T16:18:00",
+            "detail_url": "/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201",
+            "distribution_description": "Web address (URL)",
+            "distribution_url": "https://geonode.wfp.org/layers/geonode%3Asdn_ica_predlhz_geonode_20180201",
+            "id": 9108,
+            "owner__username": "stefano.cairo",
+            "popular_count": 208,
+            "rating": 0,
+            "share_count": 0,
+            "srid": "EPSG:4326",
+            "supplemental_information": "No information provided",
+            "temporal_extent_end": "2020-12-25T00:00:00",
+            "temporal_extent_start": "2020-12-22T00:00:00",
+            "thumbnail_url": "https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png",
+            "title": "ICA Sudan temporal",
+            "uuid": "e4cc9008-ee69-11e8-a005-005056822e38",
+        },
     ]
 
     wfpmetadata = {
@@ -212,6 +234,27 @@ class TestGeoNodeToHDX:
             "maintainer": "d7a13725-5cb5-48f4-87ac-a70b5cea531e",
             "owner_org": "3ecac442-7fed-448d-8f78-b385ef6f84e7",
             "dataset_date": "[2014-01-01T00:00:00 TO 2014-12-31T23:59:59]",
+            "data_update_frequency": "-2",
+            "subnational": "1",
+            "groups": [{"name": "sdn"}],
+            "tags": [
+                {
+                    "name": "geodata",
+                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
+                },
+                {
+                    "name": "topography",
+                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
+                },
+            ],
+        },
+        {
+            "name": "wfp-geonode-ica-sudan-temporal",
+            "title": "ICA Sudan temporal",
+            "notes": "This layer contains...",
+            "maintainer": "d7a13725-5cb5-48f4-87ac-a70b5cea531e",
+            "owner_org": "3ecac442-7fed-448d-8f78-b385ef6f84e7",
+            "dataset_date": "[2020-12-22T00:00:00 TO 2020-12-25T23:59:59]",
             "data_update_frequency": "-2",
             "subnational": "1",
             "groups": [{"name": "sdn"}],
@@ -269,6 +312,26 @@ class TestGeoNodeToHDX:
                 "url_type": "api",
             },
         ],
+        [
+            {
+                "name": "ICA Sudan temporal shapefile",
+                "url": "https://ogcserver.gis.wfp.org/geoserver/wfs?format_options=charset:UTF-8&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature",
+                "description": "Zipped Shapefile. This layer contains...",
+                "format": "shp",
+                "last_modified": "2018-11-22T16:18:00.000000",
+                "resource_type": "api",
+                "url_type": "api",
+            },
+            {
+                "name": "ICA Sudan temporal geojson",
+                "url": "https://ogcserver.gis.wfp.org/geoserver/wfs?srsName=EPSG%3A4326&typename=geonode:sdn_ica_predlhz_geonode_20180201&outputFormat=json&version=1.0.0&service=WFS&request=GetFeature",
+                "description": "GeoJSON file. This layer contains...",
+                "format": "geojson",
+                "last_modified": "2018-11-22T16:18:00.000000",
+                "resource_type": "api",
+                "url_type": "api",
+            },
+        ],
     ]
 
     wfporganization = {
@@ -306,6 +369,23 @@ class TestGeoNodeToHDX:
         {
             "name": "wfp-geonode-ica-sudan-most-predominant-livelihood-zones-showcase",
             "title": "ICA Sudan - Most Predominant Livelihood Zones",
+            "notes": "This layer contains...",
+            "url": "http://xxx/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201",
+            "image_url": "https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png",
+            "tags": [
+                {
+                    "name": "geodata",
+                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
+                },
+                {
+                    "name": "topography",
+                    "vocabulary_id": "4e61d464-4943-4e97-973a-84673c1aaa87",
+                },
+            ],
+        },
+        {
+            "name": "wfp-geonode-ica-sudan-temporal-showcase",
+            "title": "ICA Sudan temporal",
             "notes": "This layer contains...",
             "url": "http://xxx/layers/ogcserver.gis.wfp.org%3Ageonode%3Asdn_ica_predlhz_geonode_20180201",
             "image_url": "https://geonode.wfp.org/uploaded/thumbs/layer-e4cc9008-ee69-11e8-a005-005056822e38-thumb.png",
@@ -1014,6 +1094,7 @@ class TestGeoNodeToHDX:
         )
         assert datasets[0]["name"] == self.wfpdatasets[0]["name"]
         assert datasets[1]["name"] == self.wfpdatasets[1]["name"]
+        assert datasets[2]["name"] == self.wfpdatasets[2]["name"]
         geonodetohdx = GeoNodeToHDX("http://yyy", downloader)
         datasets = list()
         geonodetohdx.delete_other_datasets(
