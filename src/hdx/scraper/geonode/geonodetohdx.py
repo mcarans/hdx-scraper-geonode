@@ -7,6 +7,7 @@ Reads from GeoNode servers and creates datasets.
 """
 import logging
 from collections import OrderedDict
+from time import sleep
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 from urllib.parse import quote_plus
 
@@ -48,6 +49,7 @@ def create_dataset_showcase(
     )
     showcase.create_in_hdx()
     showcase.add_dataset(dataset)
+    sleep(0.1)
 
 
 def delete_from_hdx(dataset: Dataset) -> None:
