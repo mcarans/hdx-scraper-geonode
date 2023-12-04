@@ -34,7 +34,7 @@ classifiers = [
 requires-python = ">=3.8"
 
 dependencies = [
-    "hdx-python-api >= 6.1.3",
+    "hdx-python-api >= 6.1.4",
     "python-slugify",
 ]
 dynamic = ["version"]
