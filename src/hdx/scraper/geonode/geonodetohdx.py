@@ -262,7 +262,7 @@ class GeoNodeToHDX:
         dataset = Dataset({"title": origtitle})
         if get_date_from_title:
             ranges = dataset.remove_dates_from_title(
-                change_title=True, set_reference_period=True
+                change_title=True, set_time_period=True
             )
         else:
             ranges = list()
@@ -275,14 +275,18 @@ class GeoNodeToHDX:
         else:
             dataset_notes = f"{notes}\n\n{supplemental_information}"
         date = parse_date(layer["date"])
-        if origtitle == title:
-            dataset.set_reference_period(date)
+        temporal_extent_start = layer.get("temporal_extent_start")
+        if temporal_extent_start:
+            temporal_extent_end = layer["temporal_extent_end"]
+            dataset.set_time_period(temporal_extent_start, temporal_extent_end)
+        elif origtitle == title:
+            dataset.set_time_period(date)
         else:
             dataset_notes = (
                 f"{dataset_notes}\n\nOriginal dataset title: {origtitle}"
             )
             logger.info(
-                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {date} for reference period"
+                f"Using {ranges[0][0]}-{ranges[0][1]} instead of {date} for time period"
             )
         slugified_name = slugify(
             f"{self.get_orgname(metadata)}_geonode_{title}"
@@ -308,6 +312,8 @@ class GeoNodeToHDX:
             if tag in self.category_mapping:
                 tag = self.category_mapping[tag]
             tags.append(tag)
+        keywords = layer.get("keywords", [])
+        tags.extend(keywords)
         title_abstract = f"{title} {notes}".lower()
         for key in self.titleabstract_mapping:
             if key in title_abstract:
@@ -340,7 +346,7 @@ class GeoNodeToHDX:
                 "description": f"Zipped Shapefile. {notes}",
             }
         )
-        resource.set_file_type("zipped shapefile")
+        resource.set_format("zipped shapefile")
         resource.set_date_data_updated(date)
         dataset.add_update_resource(resource)
         resource = Resource(
@@ -350,7 +356,7 @@ class GeoNodeToHDX:
                 "description": f"GeoJSON file. {notes}",
             }
         )
-        resource.set_file_type("GeoJSON")
+        resource.set_format("GeoJSON")
         resource.set_date_data_updated(date)
         dataset.add_update_resource(resource)
 
@@ -372,6 +378,7 @@ class GeoNodeToHDX:
         create_dataset_showcase: Callable[
             [Dataset, Showcase, Any], None
         ] = create_dataset_showcase,
+        use_count: bool = True,
         countrydata: Dict[str, Optional[str]] = None,
         get_date_from_title: bool = False,
         process_dataset_name: Callable[[str], str] = lambda x: x,
@@ -385,6 +392,7 @@ class GeoNodeToHDX:
         Args:
             metadata (Dict): Dictionary containing keys: maintainerid, orgid, updatefreq, subnational
             create_dataset_showcase (Callable[[Dataset, Showcase, Any], None]): Function to call to create dataset and showcase
+            use_count (bool): Whether to use null count metadata to exclude countries. Defaults to True.
             countrydata (Dict[str, Optional[str]]): Dictionary of countrydata. Defaults to None (read from GeoNode).
             get_date_from_title (bool): Whether to remove dates from title. Defaults to False.
             process_dataset_name (Callable[[str], str]): Function to change the dataset name. Defaults to lambda x: x.
@@ -401,9 +409,9 @@ class GeoNodeToHDX:
         if countrydata:
             countries = [countrydata]
         else:
-            countries = self.get_countries()
+            countries = self.get_countries(use_count=use_count)
             logger.info(f"Number of countries: {len(countries)}")
-        reference_periods = OrderedDict()
+        time_periods = OrderedDict()
         if "batch" not in kwargs:
             kwargs["batch"] = get_uuid()
         for countrydata in countries:
@@ -427,7 +435,7 @@ class GeoNodeToHDX:
                     for range in ranges:
                         if range[1] > max_date:
                             max_date = range[1]
-                    prev_max = reference_periods.get(dataset_name)
+                    prev_max = time_periods.get(dataset_name)
                     if prev_max and prev_max > max_date:
                         logger.warning(
                             f'Ignoring {layer["title"]} with max date {max_date}!'
@@ -435,8 +443,8 @@ class GeoNodeToHDX:
                         )
                         continue
                     create_dataset_showcase(dataset, showcase, **kwargs)
-                    reference_periods[dataset_name] = max_date
-        return list(reference_periods.keys())
+                    time_periods[dataset_name] = max_date
+        return list(time_periods.keys())
 
     def delete_other_datasets(
         self,

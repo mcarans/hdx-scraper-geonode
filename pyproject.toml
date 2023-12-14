@@ -34,7 +34,7 @@ classifiers = [
 requires-python = ">=3.8"
 
 dependencies = [
-    "hdx-python-api >= 6.0.8",
+    "hdx-python-api >= 6.2.0",
     "python-slugify",
 ]
 dynamic = ["version"]
@@ -85,7 +85,7 @@ test = """
        """
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.11"]
+python = ["3.12"]
 
 [tool.hatch.envs.lint]
 detached = true

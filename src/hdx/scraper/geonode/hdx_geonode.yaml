@@ -12,6 +12,7 @@ category_mapping:
   "Physical Features, Land Cover, Land Use, DEM": topography
   Farming: livelihoods
   "Natural Hazards": "hazards and risk"
+  "Disaster Risks": "hazards and risk"
 
 titleabstract_mapping:
   "land cover":
