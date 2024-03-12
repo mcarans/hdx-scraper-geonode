@@ -1,4 +1,5 @@
 """Geonode scraper Tests"""
+
 import copy
 from datetime import datetime, timezone
 from os.path import join
@@ -901,9 +902,9 @@ class TestGeoNodeToHDX:
         assert showcase is None
         geonodetohdx.get_category_mapping()["Location"] = "acronyms"
         geonodetohdx.get_titleabstract_mapping()["ffa"] = ["cash assistance"]
-        layersdata[
-            "abstract"
-        ] = f"{abstract} landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion"
+        layersdata["abstract"] = (
+            f"{abstract} landslide flood drought ffa emergency levels admin boundaries food security refugee camp idp malnutrition food distribution streets airport bridges frost erosion"
+        )
         dataset, ranges, showcase = geonodetohdx.generate_dataset_and_showcase(
             "MMR", layersdata, self.mimumetadata, get_date_from_title=True
         )
